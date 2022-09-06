@@ -41,6 +41,10 @@ public abstract class Actor implements Drawable {
         return cell;
     }
 
+    public void setCell(Cell cell) {
+        this.cell = cell;
+    }
+
     public int getX() {
         return cell.getX();
     }
@@ -48,6 +52,4 @@ public abstract class Actor implements Drawable {
     public int getY() {
         return cell.getY();
     }
-
-
 }
