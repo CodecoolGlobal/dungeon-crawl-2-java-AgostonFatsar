@@ -63,7 +63,6 @@ public class Main extends Application {
         pickUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("OnAction");
                 Cell playerCell = map.getPlayer().getCell();
                 if (playerCell.getItem() != null){
                     playerCell.getItem().act();
