@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.*;
 //import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -122,7 +123,15 @@ public class Main extends Application {
     }
 
     private String inventory(){
-        return "";
+        StringBuilder sb = new StringBuilder()
+                .append("\n" + "Inventory:");
+        if (map.getPlayer().getItems() != null){
+            for (Item item : map.getPlayer().getItems()){
+                sb.append("\n" + item.getTileName());
+            }
+        }
+
+        return sb.toString();
     }
 }
 
