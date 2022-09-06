@@ -45,6 +45,10 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new TranquilizerGun(cell);
                             break;
+                        case 'a':
+                            cell.setType(CellType.FLOOR);
+                            new Auto(cell);
+                            break;
                         case '@':
                             cell.setType(CellType.FLOOR);
                             map.setPlayer(new Player(cell));
