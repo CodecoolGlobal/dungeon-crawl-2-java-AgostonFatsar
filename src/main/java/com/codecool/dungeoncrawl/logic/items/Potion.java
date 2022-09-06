@@ -11,4 +11,12 @@ public class Potion extends Item{
     public String getTileName() {
         return "potion";
     }
+
+    @Override
+    public void act() {
+
+       int currentHealth = getCell().getActor().getHealth();
+        getCell().getActor().setHealth(currentHealth+2);
+
+    }
 }
