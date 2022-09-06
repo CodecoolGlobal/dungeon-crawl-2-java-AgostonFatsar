@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.*;
 //import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +27,7 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Label inventoryLabel = new Label();
     Button pickUpButton = new Button("Pick Up");
 
 
@@ -42,6 +44,7 @@ public class Main extends Application {
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
         ui.add(pickUpButton, 0, 2);
+        ui.add(inventoryLabel, 0, 3);
 
         BorderPane borderPane = new BorderPane();
 
@@ -61,6 +64,11 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("OnAction");
+                Cell playerCell = map.getPlayer().getCell();
+                if (playerCell.getItem() != null){
+                    playerCell.getItem().act();
+                    playerCell.setItem(null);
+                }
                 //item = map.getItem();
                 //inventory.add(item;
             }
@@ -108,5 +116,22 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
+        String inventoryText = inventory();
+        inventoryLabel.setText(""+ inventoryText);
+
+
+    }
+
+    private String inventory(){
+        StringBuilder sb = new StringBuilder()
+                .append("\n" + "Inventory:");
+        if (map.getPlayer().getItems() != null){
+            for (Item item : map.getPlayer().getItems()){
+                sb.append("\n" + item.getTileName());
+            }
+        }
+
+        return sb.toString();
     }
 }
+
