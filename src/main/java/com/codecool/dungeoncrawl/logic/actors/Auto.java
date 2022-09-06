@@ -9,13 +9,14 @@ public class Auto extends Actor{
         super(cell);
     }
 
+
+
     @Override
     public String getTileName() {
         return "auto";
     }
 
-    @Override
-    public void move(int dx, int dy) {
+    public void moveCar() {
         super.move(1, 0);
     }
 

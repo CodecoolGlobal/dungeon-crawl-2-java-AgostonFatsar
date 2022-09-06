@@ -81,21 +81,25 @@ public class Main extends Application {
             case UP:
                 map.getPlayer().move(0, -1);
                 map.getSkeleton().moveEnemy(map.getPlayer());
+                map.getAuto().moveCar();
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
                 map.getSkeleton().moveEnemy(map.getPlayer());
+                map.getAuto().moveCar();
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
                 map.getSkeleton().moveEnemy(map.getPlayer());
+                map.getAuto().moveCar();
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
                 map.getSkeleton().moveEnemy(map.getPlayer());
+                map.getAuto().moveCar();
                 refresh();
                 break;
         }

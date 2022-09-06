@@ -10,6 +10,8 @@ public class GameMap {
     private Player player;
     private Skeleton skeleton;
 
+    private Auto auto;
+
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -39,6 +41,14 @@ public class GameMap {
 
     public void setSkeleton(Skeleton skeleton) {
         this.skeleton = skeleton;
+    }
+
+    public Auto getAuto() {
+        return auto;
+    }
+
+    public void setAuto(Auto auto) {
+        this.auto = auto;
     }
 
     public int getWidth() {
