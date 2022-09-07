@@ -39,7 +39,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
-        ui.setPrefWidth(200);
+        ui.setPrefWidth(250);
         ui.setPadding(new Insets(10));
 
         ui.add(new Label("Player Health: "), 0, 0);
@@ -69,10 +69,11 @@ public class Main extends Application {
             public void handle(ActionEvent event) {
                 Cell playerCell = map.getPlayer().getCell();
                 if (playerCell.getItem() != null){
-                    playerCell.getItem().act();
+                    playerCell.getItem().act(map);
                     playerCell.setItem(null);
                 }
-
+                //item = map.getItem();
+                //inventory.add(item;
             }
         });
     }

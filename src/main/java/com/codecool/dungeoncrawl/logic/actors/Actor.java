@@ -22,8 +22,13 @@ public abstract class Actor implements Drawable {
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
-        if (nextCell.getTileName().equals("wall") || (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion"))
-                || (nextCell.getTileName().equals("closedDoor") && !checkPlayerItem("tranqgun"))) {
+        if (nextCell.getTileName().equals("wall") || (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
+                (nextCell.getTileName().equals("closedDoor") && (!checkPlayerItem("Successfully saved Chameleon!") ||
+                !checkPlayerItem("Successfully saved Panda!") || !checkPlayerItem("Successfully saved Lion!"))) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("lion") && !checkPlayerItem("tranqgun")) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Chameleon!") && !checkPlayerItem("chameleon")) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Panda!") && !checkPlayerItem("panda")) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Lion!") && !checkPlayerItem("lion"))) {
         } else if (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton"))
             confrontation(nextCell);
         else {
@@ -36,10 +41,11 @@ public abstract class Actor implements Drawable {
     private void confrontation(Cell nextCell) {
 
         nextCell.getActor().beingAttacked();
-        if(!nextCell.getActor().isAlive) {
+        if (!nextCell.getActor().isAlive) {
             nextCell.setActor(null);
+        } else {
+            this.beingAttacked();
         }
-        else{this.beingAttacked();}
 /*        int enemyHealth = enemy.getHealth();
         health -= 2;
         enemy.setHealth(enemyHealth - 5);
@@ -55,8 +61,6 @@ public abstract class Actor implements Drawable {
             isAlive = false;
         }
     }
-
-    ;
 
 
     public int getHealth() {
