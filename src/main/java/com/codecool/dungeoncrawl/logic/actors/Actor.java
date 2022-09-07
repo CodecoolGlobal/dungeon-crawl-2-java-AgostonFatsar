@@ -22,7 +22,7 @@ public abstract class Actor implements Drawable {
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if(nextCell.getTileName().equals("wall") ||
-                (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton"))){}
+                nextCell.getActor() != null || (nextCell.getTileName().equals("closedDoor") && !checkPlayerItem("tranqgun"))){}
         else {
         cell.setActor(null);
         nextCell.setActor(this);
@@ -47,6 +47,17 @@ public abstract class Actor implements Drawable {
 
     public int getY() {
         return cell.getY();
+    }
+
+    public boolean checkPlayerItem(String requiredKey){
+        boolean hasItem = false;
+        Player player = (Player) this;
+        for (Item item : player.getItems()) {
+            if (item.getTileName().equals(requiredKey)){
+                hasItem = true;
+            }
+        }
+        return hasItem;
     }
 
 
