@@ -7,9 +7,12 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 public class Auto extends Actor {
     private Cell cell = super.getCell();
 
+    private static int damageTaken = 0;
+
     public Auto(Cell cell) {
-        super(cell);
+        super(cell, damageTaken);
         startCell = cell;
+        setHealth(1000);
     }
 
     int startX = 3;

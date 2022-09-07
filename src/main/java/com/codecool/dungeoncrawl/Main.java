@@ -27,6 +27,7 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Label monsterHealthLabel = new Label();
     Label inventoryLabel = new Label();
     Button pickUpButton = new Button("Pick Up");
 
@@ -41,10 +42,13 @@ public class Main extends Application {
         ui.setPrefWidth(250);
         ui.setPadding(new Insets(10));
 
-        ui.add(new Label("Health: "), 0, 0);
+        ui.add(new Label("Player Health: "), 0, 0);
+        ui.add(new Label("Capitalist Health: "), 0,1);
+
         ui.add(healthLabel, 1, 0);
-        ui.add(pickUpButton, 0, 2);
-        ui.add(inventoryLabel, 0, 3);
+        ui.add(monsterHealthLabel, 1,1);
+        ui.add(pickUpButton, 0, 3);
+        ui.add(inventoryLabel, 0, 4);
 
         BorderPane borderPane = new BorderPane();
 
@@ -122,6 +126,7 @@ public class Main extends Application {
                 }
             }
         }
+        monsterHealthLabel.setText("" + map.getSkeleton().getHealth());
         healthLabel.setText("" + map.getPlayer().getHealth());
         String inventoryText = inventory();
         inventoryLabel.setText(""+ inventoryText);
