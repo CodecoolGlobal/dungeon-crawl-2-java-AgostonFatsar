@@ -55,6 +55,10 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             map.setAuto(new Auto(cell));
                             break;
+                        case 'L':
+                            cell.setType(CellType.FLOOR);
+                            new Lion(cell);
+                            break;
                         case '@':
                             cell.setType(CellType.FLOOR);
                             map.setPlayer(new Player(cell));
