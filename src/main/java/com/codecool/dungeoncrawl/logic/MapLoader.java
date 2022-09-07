@@ -2,9 +2,7 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
-import com.codecool.dungeoncrawl.logic.items.LionItem;
-import com.codecool.dungeoncrawl.logic.items.Potion;
-import com.codecool.dungeoncrawl.logic.items.TranquilizerGun;
+import com.codecool.dungeoncrawl.logic.items.*;
 
 import java.io.InputStream;
 import java.util.Scanner;
@@ -59,6 +57,26 @@ public class MapLoader {
                         case 'L':
                             cell.setType(CellType.FLOOR);
                             map.setLion(new Lion(cell));
+                            break;
+                        case 'P':
+                            cell.setType(CellType.FLOOR);
+                            new Panda(cell);
+                            break;
+                        case 'C':
+                            cell.setType(CellType.FLOOR);
+                            new Chameleon(cell);
+                            break;
+                        case 'Ö':
+                            cell.setType(CellType.FLOOR);
+                            new PandaCage(cell);
+                            break;
+                        case 'Ü':
+                            cell.setType(CellType.FLOOR);
+                            new LionCage(cell);
+                            break;
+                        case 'Ó':
+                            cell.setType(CellType.FLOOR);
+                            new ChameleonCage(cell);
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
