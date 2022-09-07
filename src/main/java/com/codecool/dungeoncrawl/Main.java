@@ -121,8 +121,15 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth());
         String inventoryText = inventory();
         inventoryLabel.setText(""+ inventoryText);
+        checkDoorPassing();
 
 
+    }
+
+    private void checkDoorPassing() {
+        if (map.getPlayer().getCell().getTileName().equals("closedDoor")){
+            map.getPlayer().getCell().setType(CellType.OPENDOOR);
+        }
     }
 
     private String inventory(){
