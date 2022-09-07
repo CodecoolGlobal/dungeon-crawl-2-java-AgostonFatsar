@@ -65,7 +65,7 @@ public class Main extends Application {
             public void handle(ActionEvent event) {
                 Cell playerCell = map.getPlayer().getCell();
                 if (playerCell.getItem() != null){
-                    playerCell.getItem().act();
+                    playerCell.getItem().act(map);
                     playerCell.setItem(null);
                 }
                 //item = map.getItem();

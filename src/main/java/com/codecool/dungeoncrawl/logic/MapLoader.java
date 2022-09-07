@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.items.LionItem;
 import com.codecool.dungeoncrawl.logic.items.Potion;
 import com.codecool.dungeoncrawl.logic.items.TranquilizerGun;
 
@@ -57,7 +58,7 @@ public class MapLoader {
                             break;
                         case 'L':
                             cell.setType(CellType.FLOOR);
-                            new Lion(cell);
+                            map.setLion(new Lion(cell));
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
@@ -71,5 +72,4 @@ public class MapLoader {
         }
         return map;
     }
-
 }

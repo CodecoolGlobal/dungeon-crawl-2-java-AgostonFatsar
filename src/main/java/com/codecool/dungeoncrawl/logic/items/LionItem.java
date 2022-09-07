@@ -2,22 +2,22 @@ package com.codecool.dungeoncrawl.logic.items;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 
-public class Potion extends Item{
+public class LionItem extends Item{
 
-    public Potion(Cell cell) {
+    public LionItem (Cell cell){
         super(cell);
-    }
 
+    }
     public String getTileName() {
-        return "potion";
+        return "lion";
     }
 
     @Override
     public void act(GameMap map) {
 
-       int currentHealth = getCell().getActor().getHealth();
-        getCell().getActor().setHealth(currentHealth+2);
+        Player.getItems().add(this);
 
     }
 }
