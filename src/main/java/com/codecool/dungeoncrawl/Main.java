@@ -21,12 +21,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    GameMap map = MapLoader.loadMap(1);
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Label monsterHealthLabel = new Label();
     Label inventoryLabel = new Label();
     Button pickUpButton = new Button("Pick Up");
 
@@ -41,15 +42,18 @@ public class Main extends Application {
         ui.setPrefWidth(250);
         ui.setPadding(new Insets(10));
 
-        ui.add(new Label("Health: "), 0, 0);
-        ui.add(healthLabel, 1, 0);
-        ui.add(pickUpButton, 0, 2);
-        ui.add(inventoryLabel, 0, 3);
+            ui.add(new Label("Player Health: "), 0, 0);
+            ui.add(new Label("Capitalist Health: "), 0, 1);
 
-        BorderPane borderPane = new BorderPane();
+            ui.add(healthLabel, 1, 0);
+            ui.add(monsterHealthLabel, 1, 1);
+            ui.add(pickUpButton, 0, 3);
+            ui.add(inventoryLabel, 0, 4);
 
-        borderPane.setCenter(canvas);
-        borderPane.setRight(ui);
+            BorderPane borderPane = new BorderPane();
+
+            borderPane.setCenter(canvas);
+            borderPane.setRight(ui);
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
@@ -81,18 +85,26 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
         }
@@ -119,11 +131,26 @@ public class Main extends Application {
                 }
             }
         }
+        if (map.getSkeleton() != null) monsterHealthLabel.setText("" + map.getSkeleton().getHealth());
         healthLabel.setText("" + map.getPlayer().getHealth());
         String inventoryText = inventory();
         inventoryLabel.setText(""+ inventoryText);
         checkDoorPassing();
-
+        if (map.getPlayer().checkPlayerItem("quit")){
+            System.exit(1);
+        }
+        if (map.getPlayer().checkPlayerItem("newgame")){
+            map.getPlayer().eraseItems();
+            map = MapLoader.loadMap(1);
+        }
+        if (map.getPlayer().getHealth() < 1){
+            map.getPlayer().eraseItems();
+            map = MapLoader.loadMap(0);
+        }
+        if (map.getPlayer().checkPlayerItem("nextlevel")){
+            map.getPlayer().eraseItems();
+            map = MapLoader.loadMap(2);
+        }
 
 
     }

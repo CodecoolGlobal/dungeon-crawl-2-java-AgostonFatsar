@@ -4,19 +4,20 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
-public class LionCage extends Item{
+public class NewGame extends Item{
 
-    public LionCage (Cell cell){
+    public NewGame(Cell cell) {
         super(cell);
-
     }
+
     public String getTileName() {
-        return "Successfully saved Lion!";
+        return "newgame";
     }
 
     @Override
     public void act(GameMap map) {
+
         map.getPlayer().getItems().add(this);
-        map.getPlayer().getItems().removeIf(item -> item.getTileName().equals("lion"));
+
     }
 }

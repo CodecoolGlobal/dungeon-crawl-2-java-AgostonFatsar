@@ -20,7 +20,7 @@ public class Chameleon extends Item{
 
     @Override
     public void act(GameMap map) {
-        Player.getItems().add(this);
+        map.getPlayer().getItems().add(this);
     }
 
     public void moveChameleon() {
