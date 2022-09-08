@@ -39,7 +39,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
-        ui.setPrefWidth(460);
+        ui.setPrefWidth(360);
         ui.setPadding(new Insets(10));
 
         ui.add(new Label("Player Health: "), 0, 0);
