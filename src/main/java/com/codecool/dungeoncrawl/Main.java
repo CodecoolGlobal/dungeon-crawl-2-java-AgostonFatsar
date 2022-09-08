@@ -42,18 +42,18 @@ public class Main extends Application {
         ui.setPrefWidth(250);
         ui.setPadding(new Insets(10));
 
-            ui.add(new Label("Player Health: "), 0, 0);
-            ui.add(new Label("Capitalist Health: "), 0, 1);
+        ui.add(new Label("Player Health: "), 0, 0);
+        ui.add(new Label("Capitalist Health: "), 0, 1);
 
-            ui.add(healthLabel, 1, 0);
-            ui.add(monsterHealthLabel, 1, 1);
-            ui.add(pickUpButton, 0, 3);
-            ui.add(inventoryLabel, 0, 4);
+        ui.add(healthLabel, 1, 0);
+        ui.add(monsterHealthLabel, 1, 1);
+        ui.add(pickUpButton, 0, 3);
+        ui.add(inventoryLabel, 0, 4);
 
-            BorderPane borderPane = new BorderPane();
+        BorderPane borderPane = new BorderPane();
 
-            borderPane.setCenter(canvas);
-            borderPane.setRight(ui);
+        borderPane.setCenter(canvas);
+        borderPane.setRight(ui);
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
@@ -67,7 +67,7 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 Cell playerCell = map.getPlayer().getCell();
-                if (playerCell.getItem() != null){
+                if (playerCell.getItem() != null) {
                     playerCell.getItem().act(map);
                     playerCell.setItem(null);
                 }
@@ -80,39 +80,44 @@ public class Main extends Application {
     }
 
 
-
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
-                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
-                if(map.getAuto() != null) map.getAuto().moveCar();
+                if (map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if (map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
-                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
-                if(map.getAuto() != null) map.getAuto().moveCar();
+                if (map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if (map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
-                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
-                if(map.getAuto() != null) map.getAuto().moveCar();
+                if (map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if (map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
-                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
-                if(map.getAuto() != null) map.getAuto().moveCar();
+                if (map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if (map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
         }
     }
 
     private void refresh() {
-        if (map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
-        if (map.getAuto() != null)map.getAuto().moveCar();
+        if (map.getSkeleton() != null) {
+            for (Skeleton skeleton : map.getSkeletons()) {
+                if (skeleton.isAlive()) {
+                    skeleton.moveEnemy(map.getPlayer());
+                }
+            }
+        }
+        if (map.getAuto() != null) map.getAuto().moveCar();
         if (map.getChameleon() != null) map.getChameleon().moveChameleon();
         if (map.getPanda() != null) map.getPanda().movePanda();
         context.setFill(Color.BLACK);
@@ -122,11 +127,9 @@ public class Main extends Application {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
                     Tiles.drawTile(context, cell.getActor(), x, y);
-                }
-                else if (cell.getItem() != null){
+                } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(), x, y);
-                }
-                else {
+                } else {
                     Tiles.drawTile(context, cell, x, y);
                 }
             }
@@ -134,20 +137,20 @@ public class Main extends Application {
         if (map.getSkeleton() != null) monsterHealthLabel.setText("" + map.getSkeleton().getHealth());
         healthLabel.setText("" + map.getPlayer().getHealth());
         String inventoryText = inventory();
-        inventoryLabel.setText(""+ inventoryText);
+        inventoryLabel.setText("" + inventoryText);
         checkDoorPassing();
-        if (map.getPlayer().checkPlayerItem("quit")){
+        if (map.getPlayer().checkPlayerItem("quit")) {
             System.exit(1);
         }
-        if (map.getPlayer().checkPlayerItem("newgame")){
+        if (map.getPlayer().checkPlayerItem("newgame")) {
             map.getPlayer().eraseItems();
             map = MapLoader.loadMap(1);
         }
-        if (map.getPlayer().getHealth() < 1){
+        if (!(map.getPlayer().isAlive())) {
             map.getPlayer().eraseItems();
             map = MapLoader.loadMap(0);
         }
-        if (map.getPlayer().checkPlayerItem("nextlevel")){
+        if (map.getPlayer().checkPlayerItem("nextlevel")) {
             map.getPlayer().eraseItems();
             map = MapLoader.loadMap(2);
         }
@@ -156,16 +159,16 @@ public class Main extends Application {
     }
 
     private void checkDoorPassing() {
-        if (map.getPlayer().getCell().getTileName().equals("closedDoor")){
+        if (map.getPlayer().getCell().getTileName().equals("closedDoor")) {
             map.getPlayer().getCell().setType(CellType.OPENDOOR);
         }
     }
 
-    private String inventory(){
+    private String inventory() {
         StringBuilder sb = new StringBuilder()
                 .append("\n" + "Inventory:");
-        if (map.getPlayer().getItems() != null){
-            for (Item item : map.getPlayer().getItems()){
+        if (map.getPlayer().getItems() != null) {
+            for (Item item : map.getPlayer().getItems()) {
                 sb.append("\n" + item.getTileName());
             }
         }

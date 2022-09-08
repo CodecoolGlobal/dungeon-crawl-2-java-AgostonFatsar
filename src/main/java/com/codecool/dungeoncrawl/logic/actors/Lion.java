@@ -6,10 +6,10 @@ public class Lion extends Actor{
 
     private Cell cell = super.getCell();
 
-    private static int damageTaken = 10;
+    private static int damage = 3;
 
     public Lion(Cell cell){
-        super(cell, damageTaken);
+        super(cell, damage);
         setHealth(1000);
     }
 

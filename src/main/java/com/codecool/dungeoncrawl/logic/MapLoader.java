@@ -41,7 +41,9 @@ public class MapLoader {
                             break;
                         case 's':
                             cell.setType(CellType.FLOOR);
-                            map.setSkeleton(new Skeleton(cell));
+                            Skeleton skeleton = new Skeleton(cell);
+                            map.setSkeleton(skeleton);
+                            map.addSkeleton(skeleton);
                             break;
                         case 'p':
                             cell.setType(CellType.FLOOR);

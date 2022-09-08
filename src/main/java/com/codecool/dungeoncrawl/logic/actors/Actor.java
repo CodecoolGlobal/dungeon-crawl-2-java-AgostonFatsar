@@ -2,49 +2,60 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
+import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.items.Item;
+
+import java.util.ArrayList;
 
 public abstract class Actor implements Drawable {
     private Cell cell;
 
     protected int health;
-    private int damageTaken;
+
+    private int damage;
 
     protected boolean isAlive;
 
-    public Actor(Cell cell, int damageTaken) {
+
+    public Actor(Cell cell, int damage) {
         this.cell = cell;
         this.cell.setActor(this);
         isAlive = true;
-        this.damageTaken = damageTaken;
+        this.damage = damage;
 
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
-        if (nextCell.getTileName().equals("wall") || (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
+        if (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton") ||
+                nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto") ||
+                nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion"))
+            confrontation(nextCell);
+        else if (nextCell.getTileName().equals("wall") || (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
                 (nextCell.getTileName().equals("closedDoor") && (!checkPlayerItem("Successfully saved Chameleon!") ||
-                !checkPlayerItem("Successfully saved Panda!") || !checkPlayerItem("Successfully saved Lion!"))) ||
+                        !checkPlayerItem("Successfully saved Panda!") || !checkPlayerItem("Successfully saved Lion!"))) ||
                 (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("lion") && !checkPlayerItem("tranqgun")) ||
                 (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Chameleon!") && !checkPlayerItem("chameleon")) ||
                 (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Panda!") && !checkPlayerItem("panda")) ||
                 (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Lion!") && !checkPlayerItem("lion"))) {
-        } else if (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton"))
-            confrontation(nextCell);
-        else {
+        } else {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
         }
     }
 
-    private void confrontation(Cell nextCell) {
+    protected void confrontation(Cell nextCell) {
 
-        nextCell.getActor().beingAttacked();
+        nextCell.getActor().beingAttacked(this);
         if (!nextCell.getActor().isAlive) {
             nextCell.setActor(null);
         } else {
-            this.beingAttacked();
+            this.beingAttacked(nextCell.getActor());
         }
 /*        int enemyHealth = enemy.getHealth();
         health -= 2;
@@ -55,8 +66,8 @@ public abstract class Actor implements Drawable {
         } else if (health < 1) this.getCell().setActor(null);*/
     }
 
-    public void beingAttacked() {
-        health -= damageTaken;
+    public void beingAttacked(Actor attacker) {
+        health -= attacker.getDamage();
         if (health < 1) {
             isAlive = false;
         }
@@ -79,12 +90,17 @@ public abstract class Actor implements Drawable {
         this.cell = cell;
     }
 
+
     public int getX() {
         return cell.getX();
     }
 
     public int getY() {
         return cell.getY();
+    }
+
+    public boolean isAlive() {
+        return isAlive;
     }
 
     public boolean checkPlayerItem(String requiredKey) {
@@ -97,6 +113,4 @@ public abstract class Actor implements Drawable {
         }
         return hasItem;
     }
-
-
 }

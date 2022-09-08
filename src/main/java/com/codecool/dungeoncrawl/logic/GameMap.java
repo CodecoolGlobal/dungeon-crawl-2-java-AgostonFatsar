@@ -5,6 +5,8 @@ import com.codecool.dungeoncrawl.logic.items.Chameleon;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Panda;
 
+import java.util.ArrayList;
+
 public class GameMap {
     private int width;
     private int height;
@@ -12,6 +14,8 @@ public class GameMap {
 
     private Player player;
     private Skeleton skeleton;
+
+    private ArrayList<Skeleton> skeletons = new ArrayList<Skeleton>();
     private Panda panda;
 
     private Chameleon chameleon;
@@ -90,5 +94,13 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public ArrayList<Skeleton> getSkeletons() {
+        return skeletons;
+    }
+
+    public  void addSkeleton(Skeleton skeleton) {
+        skeletons.add(skeleton);
     }
 }
