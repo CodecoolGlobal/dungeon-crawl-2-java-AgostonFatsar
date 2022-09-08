@@ -69,7 +69,11 @@ public class Main extends Application {
                 Cell playerCell = map.getPlayer().getCell();
                 if (playerCell.getItem() != null){
                     playerCell.getItem().act(map);
-                    playerCell.setItem(null);
+                    if (!(playerCell.getItem().getTileName().equals("Successfully saved Lion!")) &&
+                            !(playerCell.getItem().getTileName().equals("Successfully saved Chameleon!")) &&
+                            !(playerCell.getItem().getTileName().equals("Successfully saved Panda!"))) {
+                        playerCell.setItem(null);
+                    }
                 }
                 //item = map.getItem();
                 //inventory.add(item;

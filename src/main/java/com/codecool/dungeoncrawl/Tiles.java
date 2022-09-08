@@ -10,7 +10,7 @@ import java.util.Map;
 public class Tiles {
     public static int TILE_WIDTH = 32;
 
-    private static Image tileset = new Image("/tiles2.png", 543 * 2, 543 * 2, true, false);
+    private static Image tileset = new Image("/tiles_corrected.png", 543 * 2, 543 * 2, true, false);
     private static Map<String, Tile> tileMap = new HashMap<>();
     public static class Tile {
         public final int x, y, w, h;
@@ -28,12 +28,12 @@ public class Tiles {
         tileMap.put("closedDoor", new Tile(5, 4));
         tileMap.put("openDoor", new Tile(4, 4));
         tileMap.put("floor", new Tile(2, 0));
-        tileMap.put("player", new Tile(27, 0));
-        tileMap.put("skeleton", new Tile(29, 6));
+        tileMap.put("player", new Tile(25, 1));
+        tileMap.put("skeleton", new Tile(30, 9));
         tileMap.put("potion", new Tile(26, 23));
-        tileMap.put("tranqgun", new Tile(6, 31));
+        tileMap.put("tranqgun", new Tile(20, 29));
         tileMap.put("auto", new Tile(13, 23));
-        tileMap.put("lion", new Tile(18, 8));
+        tileMap.put("lion", new Tile(30, 7));
         tileMap.put("panda", new Tile(18, 7));
         tileMap.put("chameleon", new Tile(18, 9));
         tileMap.put("Successfully saved Lion!", new Tile(23, 10));
