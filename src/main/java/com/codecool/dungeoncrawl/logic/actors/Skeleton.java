@@ -4,11 +4,11 @@ import com.codecool.dungeoncrawl.logic.Cell;
 
 public class Skeleton extends Actor {
     private Cell cell = super.getCell();
-    private static int damageTaken = 5;
+    private static int damage = 2;
 
     public Skeleton(Cell cell) {
-        super(cell, damageTaken);
-        super.setHealth(15);
+        super(cell, damage);
+        super.setHealth(10);
     }
 
     @Override
@@ -40,7 +40,10 @@ public class Skeleton extends Actor {
     }
 
     public void checkCellAndMove(Cell nextCell, Cell originalCell) {
-        if (nextCell.getTileName().equals("wall") || nextCell.getItem() != null ||
+
+        if (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("player")){
+            confrontation(nextCell);
+        } else if (nextCell.getTileName().equals("wall") || nextCell.getItem() != null ||
                 (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton")) ||
                 (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
                 (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto"))) {

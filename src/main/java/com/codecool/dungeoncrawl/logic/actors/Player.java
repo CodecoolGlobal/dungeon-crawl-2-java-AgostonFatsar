@@ -8,10 +8,10 @@ import java.util.ArrayList;
 public class Player extends Actor {
 
     private  ArrayList<Item> items = new ArrayList<Item>();
-    private static int damageTaken = 2;
+    private static int damage = 5;
     public Player(Cell cell) {
-        super(cell, damageTaken);
-        super.setHealth(5);
+        super(cell, damage);
+        super.setHealth(40);
     }
 
 

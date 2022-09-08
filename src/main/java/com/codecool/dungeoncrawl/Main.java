@@ -143,7 +143,7 @@ public class Main extends Application {
             map.getPlayer().eraseItems();
             map = MapLoader.loadMap(1);
         }
-        if (map.getPlayer().getHealth() < 1){
+        if (!(map.getPlayer().isAlive())){
             map.getPlayer().eraseItems();
             map = MapLoader.loadMap(0);
         }

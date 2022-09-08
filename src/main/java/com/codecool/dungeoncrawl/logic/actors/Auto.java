@@ -7,10 +7,10 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 public class Auto extends Actor {
     private Cell cell = super.getCell();
 
-    private static int damageTaken = 0;
+    private static int damage = 100;
 
     public Auto(Cell cell) {
-        super(cell, damageTaken);
+        super(cell, damage);
         startCell = cell;
         setHealth(1000);
     }
@@ -28,7 +28,10 @@ public class Auto extends Actor {
 
     public void moveCar() {
         Cell nextCell = cell.getNeighbor(1, 0);
-        if (nextCell.getTileName().equals("wall")) {
+        if (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("player")){
+            confrontation(nextCell);
+        }
+        else if (nextCell.getTileName().equals("wall")) {
             cell.setActor(null);
             cell = startCell.getNeighbor(-1,0);
         } else {
