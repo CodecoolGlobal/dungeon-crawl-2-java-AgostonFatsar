@@ -6,6 +6,8 @@ public class Skeleton extends Actor {
     private Cell cell = super.getCell();
     private static int damage = 2;
 
+
+
     public Skeleton(Cell cell) {
         super(cell, damage);
         super.setHealth(10);

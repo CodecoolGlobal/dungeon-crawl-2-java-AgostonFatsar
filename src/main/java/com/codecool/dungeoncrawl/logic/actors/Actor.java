@@ -2,7 +2,10 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
+import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.items.Item;
+
+import java.util.ArrayList;
 
 public abstract class Actor implements Drawable {
     private Cell cell;
@@ -12,6 +15,7 @@ public abstract class Actor implements Drawable {
     private int damage;
 
     protected boolean isAlive;
+
 
     public Actor(Cell cell, int damage) {
         this.cell = cell;
@@ -86,6 +90,7 @@ public abstract class Actor implements Drawable {
         this.cell = cell;
     }
 
+
     public int getX() {
         return cell.getX();
     }
@@ -108,6 +113,4 @@ public abstract class Actor implements Drawable {
         }
         return hasItem;
     }
-
-
 }
