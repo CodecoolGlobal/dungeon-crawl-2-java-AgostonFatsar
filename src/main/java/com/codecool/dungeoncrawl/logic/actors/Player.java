@@ -11,7 +11,7 @@ public class Player extends Actor {
     private static int damageTaken = 2;
     public Player(Cell cell) {
         super(cell, damageTaken);
-        super.setHealth(2);
+        super.setHealth(5);
     }
 
 
