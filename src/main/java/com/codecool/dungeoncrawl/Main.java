@@ -54,7 +54,6 @@ public class Main extends Application {
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
-        scene.setOnKeyPressed(this::onKeyPressed);
         //scene.setOnAction(pickUpButton::onMouseClicked);
         pickUpButton.setFocusTraversable(false);
         primaryStage.setTitle("Dungeon Crawl");
@@ -70,8 +69,10 @@ public class Main extends Application {
                 }
                 //item = map.getItem();
                 //inventory.add(item;
+                refresh();
             }
         });
+        scene.setOnKeyPressed(this::onKeyPressed);
     }
 
 
@@ -80,32 +81,28 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
                 refresh();
                 break;
         }
     }
 
     private void refresh() {
+        map.getSkeleton().moveEnemy(map.getPlayer());
+        map.getAuto().moveCar();
+        map.getChameleon().moveChameleon();
+        map.getPanda().movePanda();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {
@@ -126,6 +123,7 @@ public class Main extends Application {
         String inventoryText = inventory();
         inventoryLabel.setText(""+ inventoryText);
         checkDoorPassing();
+
 
 
     }

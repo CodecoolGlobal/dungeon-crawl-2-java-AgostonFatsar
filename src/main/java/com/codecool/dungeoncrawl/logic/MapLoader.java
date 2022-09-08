@@ -60,10 +60,11 @@ public class MapLoader {
                             break;
                         case 'P':
                             cell.setType(CellType.FLOOR);
-                            new Panda(cell);
+                            map.setPanda(new Panda(cell));
                             break;
                         case 'C':
                             cell.setType(CellType.FLOOR);
+                            map.setChameleon(new Chameleon(cell));
                             new Chameleon(cell);
                             break;
                         case 'Ö':
