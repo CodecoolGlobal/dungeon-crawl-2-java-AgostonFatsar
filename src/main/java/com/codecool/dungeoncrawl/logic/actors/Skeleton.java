@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.Util;
 import com.codecool.dungeoncrawl.logic.Cell;
 
 public class Skeleton extends Actor {
@@ -18,7 +19,7 @@ public class Skeleton extends Actor {
         return "skeleton";
     }
 
-    public void moveEnemyHorizontal(Player player) {
+    /*public void moveEnemyHorizontal(Player player) {
         int x = player.getX();
         int y = player.getY();
         Cell originalCell = cell;
@@ -36,9 +37,9 @@ public class Skeleton extends Actor {
                     checkCellAndMove(nextCell, originalCell);
                 }
             }
-        }
+        }*/
 
-    public void checkCellAndMove(Cell nextCell, Cell originalCell) {
+    public void checkCellAndMove(Cell nextCell) {
 
         if (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("player")){
             confrontation(nextCell);
@@ -47,27 +48,29 @@ public class Skeleton extends Actor {
                 (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
                 (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto"))) {
         } else {
-            originalCell.setActor(null);
+            cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
         }
     }
 
-    public void moveEnemyVertical(Player player) {
-        int y = player.getY();
-        Cell originalCell = cell;
-        int OwnY = this.getY();
-        if (isAlive) {
-                if (OwnY > y) {
-                    Cell nextCell = originalCell.getNeighbor(0, -1);
-                    checkCellAndMove(nextCell, originalCell);
-                } else if (OwnY < y) {
-                    Cell nextCell = originalCell.getNeighbor(0, +1);
-                    checkCellAndMove(nextCell, originalCell);
-                }else if (OwnY == y) {
-                    Cell nextCell = originalCell.getNeighbor(0, 0);
-                    checkCellAndMove(nextCell, originalCell);
-                }
+    public void moveSkeleton() {
+        Cell originalCell = getCell();
+
+        int randomNumber = Util.generateRandomInteger(5);
+
+        if(randomNumber == 0) {
+            Cell nextCell = originalCell.getNeighbor(-1, 0);
+            checkCellAndMove(nextCell);
+        }else if(randomNumber == 1) {
+            Cell nextCell = originalCell.getNeighbor(+1, 0);
+            checkCellAndMove(nextCell);
+        }else if(randomNumber == 2) {
+            Cell nextCell = originalCell.getNeighbor(0, -1);
+            checkCellAndMove(nextCell);
+        }else if(randomNumber == 3) {
+            Cell nextCell = originalCell.getNeighbor(0, +1);
+            checkCellAndMove(nextCell);
         }
     }
 }
