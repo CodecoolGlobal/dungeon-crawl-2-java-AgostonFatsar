@@ -39,14 +39,8 @@ public class MapLoader {
                         case 'm':
                             cell.setType(CellType.MUD);
                             break;
-                        case ',':
-                            cell.setType(CellType.CONCRETE);
-                            break;
-                        case '?':
-                            cell.setType(CellType.CONCRETE_EDGE);
-                            break;
                         case '>':
-                            cell.setType(CellType.GRASS);
+                            cell.setType(CellType.ROAD);
                             break;
                         case 'ö':
                             cell.setType(CellType.CLOSEDDOOR);
