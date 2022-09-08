@@ -25,11 +25,12 @@ public class Panda extends Item{
 
         Cell originalCell = getCell();
 
-        int randomNumber = Util.generateRandomInteger(2);
+        int randomNumber = Util.generateRandomInteger(3);
 
-        int[] list = new int[2];
+        int[] list = new int[3];
         list[0] = 1;
         list[1] = -1;
+        list[2] = 0;
 
         Cell nextCell = originalCell.getNeighbor(0, list[randomNumber]);
         checkCellAndMove(nextCell);

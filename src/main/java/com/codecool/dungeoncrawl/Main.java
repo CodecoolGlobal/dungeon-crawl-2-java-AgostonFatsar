@@ -39,7 +39,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
-        ui.setPrefWidth(250);
+        ui.setPrefWidth(460);
         ui.setPadding(new Insets(10));
 
         ui.add(new Label("Player Health: "), 0, 0);
@@ -67,7 +67,7 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 Cell playerCell = map.getPlayer().getCell();
-                if (playerCell.getItem() != null) {
+                if (playerCell.getItem() != null){
                     playerCell.getItem().act(map);
                     playerCell.setItem(null);
                 }
@@ -80,30 +80,27 @@ public class Main extends Application {
     }
 
 
+
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
-                if (map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
-                if (map.getAuto() != null) map.getAuto().moveCar();
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
-                if (map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
-                if (map.getAuto() != null) map.getAuto().moveCar();
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
-                if (map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
-                if (map.getAuto() != null) map.getAuto().moveCar();
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
-                if (map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
-                if (map.getAuto() != null) map.getAuto().moveCar();
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
         }
@@ -113,7 +110,7 @@ public class Main extends Application {
         if (map.getSkeleton() != null) {
             for (Skeleton skeleton : map.getSkeletons()) {
                 if (skeleton.isAlive()) {
-                    skeleton.moveEnemy(map.getPlayer());
+                    skeleton.moveEnemyHorizontal(map.getPlayer());
                 }
             }
         }
@@ -159,16 +156,16 @@ public class Main extends Application {
     }
 
     private void checkDoorPassing() {
-        if (map.getPlayer().getCell().getTileName().equals("closedDoor")) {
+        if (map.getPlayer().getCell().getTileName().equals("closedDoor")){
             map.getPlayer().getCell().setType(CellType.OPENDOOR);
         }
     }
 
-    private String inventory() {
+    private String inventory(){
         StringBuilder sb = new StringBuilder()
                 .append("\n" + "Inventory:");
-        if (map.getPlayer().getItems() != null) {
-            for (Item item : map.getPlayer().getItems()) {
+        if (map.getPlayer().getItems() != null){
+            for (Item item : map.getPlayer().getItems()){
                 sb.append("\n" + item.getTileName());
             }
         }

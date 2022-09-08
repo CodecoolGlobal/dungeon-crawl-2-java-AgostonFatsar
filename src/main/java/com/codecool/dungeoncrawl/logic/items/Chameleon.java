@@ -28,7 +28,7 @@ public class Chameleon extends Item{
 
         Cell originalCell = getCell();
 
-        int randomNumber = Util.generateRandomInteger(4);
+        int randomNumber = Util.generateRandomInteger(5);
 
         if(randomNumber == 0) {
             Cell nextCell = originalCell.getNeighbor(-1, 0);
