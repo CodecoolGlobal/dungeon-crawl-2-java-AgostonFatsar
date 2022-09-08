@@ -148,6 +148,10 @@ public class Main extends Application {
             map.getPlayer().eraseItems();
             map = MapLoader.loadMap(0);
         }
+        if (map.getPlayer().checkPlayerItem("nextlevel")){
+            map.getPlayer().eraseItems();
+            map = MapLoader.loadMap(2);
+        }
 
 
     }

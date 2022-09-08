@@ -91,6 +91,10 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Quit(cell);
                             break;
+                        case 'U':
+                            cell.setType(CellType.FLOOR);
+                            new NextLevel(cell);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }
