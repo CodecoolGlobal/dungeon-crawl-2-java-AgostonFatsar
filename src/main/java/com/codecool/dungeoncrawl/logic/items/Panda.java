@@ -16,6 +16,6 @@ public class Panda extends Item{
 
     @Override
     public void act(GameMap map) {
-        Player.getItems().add(this);
+        map.getPlayer().getItems().add(this);
     }
 }

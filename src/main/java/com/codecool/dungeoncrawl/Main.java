@@ -21,7 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    GameMap map = MapLoader.loadMap(1);
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
@@ -38,44 +38,50 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GridPane ui = new GridPane();
-        ui.setPrefWidth(250);
-        ui.setPadding(new Insets(10));
+        //boolean isGameRunning = true;
+        //while (isGameRunning) {
+            GridPane ui = new GridPane();
+            ui.setPrefWidth(250);
+            ui.setPadding(new Insets(10));
 
-        ui.add(new Label("Player Health: "), 0, 0);
-        ui.add(new Label("Capitalist Health: "), 0,1);
+            ui.add(new Label("Player Health: "), 0, 0);
+            ui.add(new Label("Capitalist Health: "), 0, 1);
 
-        ui.add(healthLabel, 1, 0);
-        ui.add(monsterHealthLabel, 1,1);
-        ui.add(pickUpButton, 0, 3);
-        ui.add(inventoryLabel, 0, 4);
+            ui.add(healthLabel, 1, 0);
+            ui.add(monsterHealthLabel, 1, 1);
+            ui.add(pickUpButton, 0, 3);
+            ui.add(inventoryLabel, 0, 4);
 
-        BorderPane borderPane = new BorderPane();
+            BorderPane borderPane = new BorderPane();
 
-        borderPane.setCenter(canvas);
-        borderPane.setRight(ui);
+            borderPane.setCenter(canvas);
+            borderPane.setRight(ui);
 
-        Scene scene = new Scene(borderPane);
-        primaryStage.setScene(scene);
-        refresh();
-        scene.setOnKeyPressed(this::onKeyPressed);
-        //scene.setOnAction(pickUpButton::onMouseClicked);
-        pickUpButton.setFocusTraversable(false);
-        primaryStage.setTitle("Dungeon Crawl");
-        primaryStage.show();
+            Scene scene = new Scene(borderPane);
+            primaryStage.setScene(scene);
+            refresh();
+            scene.setOnKeyPressed(this::onKeyPressed);
+            //scene.setOnAction(pickUpButton::onMouseClicked);
+            pickUpButton.setFocusTraversable(false);
+            primaryStage.setTitle("Dungeon Crawl");
+            primaryStage.show();
 
-        pickUpButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Cell playerCell = map.getPlayer().getCell();
-                if (playerCell.getItem() != null){
-                    playerCell.getItem().act(map);
-                    playerCell.setItem(null);
+            pickUpButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Cell playerCell = map.getPlayer().getCell();
+                    if (playerCell.getItem() != null) {
+                        playerCell.getItem().act(map);
+                        playerCell.setItem(null);
+                    }
+                    //item = map.getItem();
+                    //inventory.add(item;
                 }
-                //item = map.getItem();
-                //inventory.add(item;
-            }
-        });
+            });
+            //if (map.getPlayer().checkPlayerItem("newgame")) {
+            //    break;
+            //}
+        //}
     }
 
 
@@ -84,26 +90,26 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
         }
@@ -126,11 +132,26 @@ public class Main extends Application {
                 }
             }
         }
-        monsterHealthLabel.setText("" + map.getSkeleton().getHealth());
+        if (map.getSkeleton() != null) monsterHealthLabel.setText("" + map.getSkeleton().getHealth());
         healthLabel.setText("" + map.getPlayer().getHealth());
         String inventoryText = inventory();
         inventoryLabel.setText(""+ inventoryText);
         checkDoorPassing();
+        if (map.getPlayer().checkPlayerItem("quit")){
+            System.exit(1);
+        }
+        if (map.getPlayer().checkPlayerItem("newgame")){
+            map.getPlayer().eraseItems();
+            map = MapLoader.loadMap(1);
+        }
+        if (map.getPlayer().getHealth() < 1){
+            map.getPlayer().eraseItems();
+            map = MapLoader.loadMap(0);
+        }
+        if (map.getPlayer().checkPlayerItem("nextlevel")){
+            map.getPlayer().eraseItems();
+            map = MapLoader.loadMap(2);
+        }
 
 
     }

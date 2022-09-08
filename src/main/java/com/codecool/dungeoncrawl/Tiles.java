@@ -39,6 +39,9 @@ public class Tiles {
         tileMap.put("Successfully saved Lion!", new Tile(23, 10));
         tileMap.put("Successfully saved Panda!", new Tile(0, 9));
         tileMap.put("Successfully saved Chameleon!", new Tile(18, 10));
+        tileMap.put("newgame", new Tile(18, 31));
+        tileMap.put("quit", new Tile(21, 31));
+        tileMap.put("nextlevel", new Tile(15, 5));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {

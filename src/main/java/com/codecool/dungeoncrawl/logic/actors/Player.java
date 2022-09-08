@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Player extends Actor {
 
-    private static ArrayList<Item> items = new ArrayList<Item>();
+    private  ArrayList<Item> items = new ArrayList<Item>();
     private static int damageTaken = 2;
     public Player(Cell cell) {
         super(cell, damageTaken);
@@ -20,11 +20,14 @@ public class Player extends Actor {
         return "player";
     }
 
-    public static ArrayList<Item> getItems() {
+    public  ArrayList<Item> getItems() {
         return items;
     }
 
-    public static void setItems(ArrayList<Item> items) {
-        Player.items = items;
+    public  void setItems(ArrayList<Item> items) {
+    }
+
+    public  void eraseItems() {
+        items.clear();
     }
 }

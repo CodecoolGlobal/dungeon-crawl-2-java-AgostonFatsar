@@ -17,7 +17,7 @@ public class TranquilizerGun extends Item{
     @Override
     public void act(GameMap map) {
 
-        Player.getItems().add(this);
+        map.getPlayer().getItems().add(this);
         // delete lion actor
 
         // not changing cell type but removing lion

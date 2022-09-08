@@ -8,7 +8,7 @@ public class Skeleton extends Actor {
 
     public Skeleton(Cell cell) {
         super(cell, damageTaken);
-        super.setHealth(5);
+        super.setHealth(15);
     }
 
     @Override
