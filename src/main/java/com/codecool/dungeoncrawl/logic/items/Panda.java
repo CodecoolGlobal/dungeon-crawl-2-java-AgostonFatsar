@@ -18,6 +18,7 @@ public class Panda extends Item{
     @Override
     public void act(GameMap map) {
         map.getPlayer().getItems().add(this);
+        map.setPanda(null);
     }
 
     public void movePanda() {
