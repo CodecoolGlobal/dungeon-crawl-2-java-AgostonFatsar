@@ -111,10 +111,10 @@ public class Main extends Application {
     }
 
     private void refresh() {
-        map.getSkeleton().moveEnemy(map.getPlayer());
-        map.getAuto().moveCar();
-        map.getChameleon().moveChameleon();
-        map.getPanda().movePanda();
+        if (map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+        if (map.getAuto() != null)map.getAuto().moveCar();
+        if (map.getChameleon() != null) map.getChameleon().moveChameleon();
+        if (map.getPanda() != null) map.getPanda().movePanda();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {
