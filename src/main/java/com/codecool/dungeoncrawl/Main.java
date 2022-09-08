@@ -38,11 +38,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //boolean isGameRunning = true;
-        //while (isGameRunning) {
-            GridPane ui = new GridPane();
-            ui.setPrefWidth(250);
-            ui.setPadding(new Insets(10));
+        GridPane ui = new GridPane();
+        ui.setPrefWidth(250);
+        ui.setPadding(new Insets(10));
 
             ui.add(new Label("Player Health: "), 0, 0);
             ui.add(new Label("Capitalist Health: "), 0, 1);
@@ -57,31 +55,28 @@ public class Main extends Application {
             borderPane.setCenter(canvas);
             borderPane.setRight(ui);
 
-            Scene scene = new Scene(borderPane);
-            primaryStage.setScene(scene);
-            refresh();
-            scene.setOnKeyPressed(this::onKeyPressed);
-            //scene.setOnAction(pickUpButton::onMouseClicked);
-            pickUpButton.setFocusTraversable(false);
-            primaryStage.setTitle("Dungeon Crawl");
-            primaryStage.show();
+        Scene scene = new Scene(borderPane);
+        primaryStage.setScene(scene);
+        refresh();
+        //scene.setOnAction(pickUpButton::onMouseClicked);
+        pickUpButton.setFocusTraversable(false);
+        primaryStage.setTitle("Dungeon Crawl");
+        primaryStage.show();
 
-            pickUpButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    Cell playerCell = map.getPlayer().getCell();
-                    if (playerCell.getItem() != null) {
-                        playerCell.getItem().act(map);
-                        playerCell.setItem(null);
-                    }
-                    //item = map.getItem();
-                    //inventory.add(item;
+        pickUpButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Cell playerCell = map.getPlayer().getCell();
+                if (playerCell.getItem() != null){
+                    playerCell.getItem().act(map);
+                    playerCell.setItem(null);
                 }
-            });
-            //if (map.getPlayer().checkPlayerItem("newgame")) {
-            //    break;
-            //}
-        //}
+                //item = map.getItem();
+                //inventory.add(item;
+                refresh();
+            }
+        });
+        scene.setOnKeyPressed(this::onKeyPressed);
     }
 
 
@@ -116,6 +111,10 @@ public class Main extends Application {
     }
 
     private void refresh() {
+        map.getSkeleton().moveEnemy(map.getPlayer());
+        map.getAuto().moveCar();
+        map.getChameleon().moveChameleon();
+        map.getPanda().movePanda();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {

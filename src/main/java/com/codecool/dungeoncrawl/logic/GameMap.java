@@ -1,7 +1,9 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.*;
+import com.codecool.dungeoncrawl.logic.items.Chameleon;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.items.Panda;
 
 public class GameMap {
     private int width;
@@ -10,6 +12,9 @@ public class GameMap {
 
     private Player player;
     private Skeleton skeleton;
+    private Panda panda;
+
+    private Chameleon chameleon;
 
     private Lion lion;
 
@@ -36,6 +41,14 @@ public class GameMap {
         this.player = player;
     }
 
+    public void setChameleon(Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    public Chameleon getChameleon() {
+        return chameleon;
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -49,6 +62,14 @@ public class GameMap {
 
     public void setLion(Lion lion){
         this.lion = lion;
+    }
+
+    public Panda getPanda() {
+        return panda;
+    }
+
+    public void setPanda(Panda panda) {
+        this.panda = panda;
     }
 
     public void setSkeleton(Skeleton skeleton) {
