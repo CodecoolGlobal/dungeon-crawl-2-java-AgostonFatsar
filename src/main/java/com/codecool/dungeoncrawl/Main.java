@@ -90,26 +90,26 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
-                map.getSkeleton().moveEnemy(map.getPlayer());
-                map.getAuto().moveCar();
+                if(map.getSkeleton() != null) map.getSkeleton().moveEnemy(map.getPlayer());
+                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
         }
@@ -132,7 +132,7 @@ public class Main extends Application {
                 }
             }
         }
-        monsterHealthLabel.setText("" + map.getSkeleton().getHealth());
+        if (map.getSkeleton() != null) monsterHealthLabel.setText("" + map.getSkeleton().getHealth());
         healthLabel.setText("" + map.getPlayer().getHealth());
         String inventoryText = inventory();
         inventoryLabel.setText(""+ inventoryText);
@@ -141,9 +141,11 @@ public class Main extends Application {
             System.exit(1);
         }
         if (map.getPlayer().checkPlayerItem("newgame")){
+            map.getPlayer().eraseItems();
             map = MapLoader.loadMap(1);
         }
         if (map.getPlayer().getHealth() < 1){
+            map.getPlayer().eraseItems();
             map = MapLoader.loadMap(0);
         }
 

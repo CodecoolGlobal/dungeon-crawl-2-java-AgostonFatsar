@@ -16,7 +16,7 @@ public class LionCage extends Item{
 
     @Override
     public void act(GameMap map) {
-        Player.getItems().add(this);
-        Player.getItems().removeIf(item -> item.getTileName().equals("lion"));
+        map.getPlayer().getItems().add(this);
+        map.getPlayer().getItems().removeIf(item -> item.getTileName().equals("lion"));
     }
 }
