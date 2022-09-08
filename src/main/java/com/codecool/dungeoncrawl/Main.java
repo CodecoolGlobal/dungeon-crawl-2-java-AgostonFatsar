@@ -114,7 +114,7 @@ public class Main extends Application {
         if (map.getSkeleton() != null) {
             for (Skeleton skeleton : map.getSkeletons()) {
                 if (skeleton.isAlive()) {
-                    skeleton.moveEnemyHorizontal(map.getPlayer());
+                    skeleton.moveSkeleton();
                 }
             }
         }
