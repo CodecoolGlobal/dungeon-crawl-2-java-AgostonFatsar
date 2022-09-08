@@ -19,25 +19,33 @@ public class Skeleton extends Actor {
         return "skeleton";
     }
 
-    /*public void moveEnemyHorizontal(Player player) {
-        int x = player.getX();
+
+
+    public void moveEnemy(Player player) {
         int y = player.getY();
-        Cell originalCell = cell;
-        int OwnX = this.getX();
+        Cell originalCell = getCell();
         int OwnY = this.getY();
+        int x = player.getX();
+        int OwnX = this.getX();
         if (isAlive) {
-                if (OwnX > x) {
-                    Cell nextCell = originalCell.getNeighbor(-1, 0);
-                    checkCellAndMove(nextCell, originalCell);
-                }else if (OwnX < x) {
-                    Cell nextCell = originalCell.getNeighbor(+1, 0);
-                    checkCellAndMove(nextCell, originalCell);
-                }else if (OwnX == x) {
-                    Cell nextCell = originalCell.getNeighbor(0, 0);
-                    checkCellAndMove(nextCell, originalCell);
-                }
+            if (OwnX > x) {
+                Cell nextCell = originalCell.getNeighbor(-1, 0);
+                checkCellAndMove(nextCell);
             }
-        }*/
+            if (OwnX < x) {
+                Cell nextCell = originalCell.getNeighbor(+1, 0);
+                checkCellAndMove(nextCell);
+            }
+            if (OwnY > y) {
+                Cell nextCell = originalCell.getNeighbor(0, -1);
+                checkCellAndMove(nextCell);
+            }
+            if (OwnY < y) {
+                Cell nextCell = originalCell.getNeighbor(0, +1);
+                checkCellAndMove(nextCell);
+            }
+        }
+    }
 
     public void checkCellAndMove(Cell nextCell) {
 
@@ -48,9 +56,9 @@ public class Skeleton extends Actor {
                 (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
                 (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto"))) {
         } else {
-            cell.setActor(null);
+            getCell().setActor(null);
             nextCell.setActor(this);
-            cell = nextCell;
+            setCell(nextCell);
         }
     }
 

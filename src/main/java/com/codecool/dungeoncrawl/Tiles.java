@@ -43,6 +43,9 @@ public class Tiles {
         tileMap.put("quit", new Tile(21, 31));
         tileMap.put("nextlevel", new Tile(15, 5));
         tileMap.put("mud", new Tile(6, 0));
+        tileMap.put("concrete", new Tile(18, 15));
+        tileMap.put("grass", new Tile(16, 15));
+        tileMap.put("concreteEdge", new Tile(17, 15));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {
