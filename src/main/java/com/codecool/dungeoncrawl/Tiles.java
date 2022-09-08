@@ -39,8 +39,8 @@ public class Tiles {
         tileMap.put("Successfully saved Lion!", new Tile(23, 10));
         tileMap.put("Successfully saved Panda!", new Tile(0, 9));
         tileMap.put("Successfully saved Chameleon!", new Tile(18, 10));
-        tileMap.put("newgame", new Tile(18, 31));
-        tileMap.put("quit", new Tile(21, 31));
+        tileMap.put("newgame", new Tile(19, 31));
+        tileMap.put("quit", new Tile(22, 31));
         tileMap.put("nextlevel", new Tile(15, 5));
         tileMap.put("mud", new Tile(6, 0));
         tileMap.put("road", new Tile(9, 3));
