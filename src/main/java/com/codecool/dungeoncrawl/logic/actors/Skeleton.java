@@ -81,4 +81,5 @@ public class Skeleton extends Actor {
             checkCellAndMove(nextCell);
         }
     }
+
 }
