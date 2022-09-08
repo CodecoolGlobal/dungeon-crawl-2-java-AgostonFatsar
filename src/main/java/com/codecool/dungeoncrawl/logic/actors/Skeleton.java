@@ -40,8 +40,10 @@ public class Skeleton extends Actor {
     }
 
     public void checkCellAndMove(Cell nextCell, Cell originalCell) {
-        if (nextCell.getTileName().equals("wall") ||
-                (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton"))) {
+        if (nextCell.getTileName().equals("wall") || nextCell.getItem() != null ||
+                (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton")) ||
+                (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
+                (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto"))) {
         } else {
             originalCell.setActor(null);
             nextCell.setActor(this);
