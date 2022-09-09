@@ -138,7 +138,7 @@ public class Main extends Application {
         }
         //if (map.getSkeleton() != null) monsterHealthLabel.setText("" + map.getSkeleton().getHealth());
         healthLabel.setText("" + map.getPlayer().getHealth());
-        String inventoryText = inventory();
+        String inventoryText = inventory(map.getPlayer().getCell().getNeighbor(0,-1).getTileName());
         inventoryLabel.setText("" + inventoryText);
         checkDoorPassing();
         if (map.getPlayer().checkPlayerItem("quit")) {
@@ -166,13 +166,22 @@ public class Main extends Application {
         }
     }
 
-    private String inventory(){
+    private String inventory(String cellType){
         StringBuilder sb = new StringBuilder()
                 .append("\n" + "Inventory:");
         if (map.getPlayer().getItems() != null){
             for (Item item : map.getPlayer().getItems()){
                 sb.append("\n" + item.getTileName());
             }
+        }
+        if (cellType.equals("closedDoor")){
+            sb.append("\n");
+            sb.append("\n");
+            sb.append("\n");
+            sb.append("Objectives: \n");
+            sb.append("Save Panda! \n");
+            sb.append("Save Chameleon! \n");
+            sb.append("Save Lion! \n");
         }
 
         return sb.toString();
