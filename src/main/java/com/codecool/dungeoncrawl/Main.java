@@ -69,6 +69,10 @@ public class Main extends Application {
                 Cell playerCell = map.getPlayer().getCell();
                 if (playerCell.getItem() != null){
                     playerCell.getItem().act(map);
+                    //if (playerCell.getItem().getTileName().equals("tranqgun")){
+                        //map.switchLion();
+                    //}
+                    // TODO: átírni a tranq gun lion change-jét a map objectbe,
                     if (!(playerCell.getItem().getTileName().equals("Successfully saved Lion!")) &&
                             !(playerCell.getItem().getTileName().equals("Successfully saved Chameleon!")) &&
                             !(playerCell.getItem().getTileName().equals("Successfully saved Panda!"))) {

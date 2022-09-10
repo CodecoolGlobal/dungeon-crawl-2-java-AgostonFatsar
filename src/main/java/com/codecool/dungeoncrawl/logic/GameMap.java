@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.items.Chameleon;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.items.LionItem;
 import com.codecool.dungeoncrawl.logic.items.Panda;
 
 import java.util.ArrayList;
@@ -102,5 +103,12 @@ public class GameMap {
 
     public  void addSkeleton(Skeleton skeleton) {
         skeletons.add(skeleton);
+    }
+
+    public void switchLion(Item item){
+        player.getItems().add(item);
+        Cell lionCell = getLion().getCell();
+        lionCell.setActor(null);
+        lionCell.setItem(new LionItem(lionCell));
     }
 }

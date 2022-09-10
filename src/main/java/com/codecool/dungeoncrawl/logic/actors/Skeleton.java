@@ -28,22 +28,17 @@ public class Skeleton extends Actor {
         int x = player.getX();
         int OwnX = this.getX();
         if (isAlive) {
-            if (OwnX > x) {
-                Cell nextCell = originalCell.getNeighbor(-1, 0);
-                checkCellAndMove(nextCell);
-            }
-            if (OwnX < x) {
-                Cell nextCell = originalCell.getNeighbor(+1, 0);
-                checkCellAndMove(nextCell);
-            }
-            if (OwnY > y) {
-                Cell nextCell = originalCell.getNeighbor(0, -1);
-                checkCellAndMove(nextCell);
-            }
-            if (OwnY < y) {
-                Cell nextCell = originalCell.getNeighbor(0, +1);
-                checkCellAndMove(nextCell);
-            }
+            checkNextCell(OwnX > x, originalCell, -1, 0);
+            checkNextCell(OwnX < x, originalCell, +1, 0);
+            checkNextCell(OwnY > y, originalCell, 0, -1);
+            checkNextCell(OwnY < y, originalCell, 0, +1);
+        }
+    }
+
+    private void checkNextCell(boolean OwnX, Cell originalCell, int dx, int dy) {
+        if (OwnX) {
+            Cell nextCell = originalCell.getNeighbor(dx, dy);
+            checkCellAndMove(nextCell);
         }
     }
 
@@ -76,10 +71,7 @@ public class Skeleton extends Actor {
         }else if(randomNumber == 2) {
             Cell nextCell = originalCell.getNeighbor(0, -1);
             checkCellAndMove(nextCell);
-        }else if(randomNumber == 3) {
-            Cell nextCell = originalCell.getNeighbor(0, +1);
-            checkCellAndMove(nextCell);
-        }
+        }else checkNextCell(randomNumber == 3, originalCell, 0, +1);
     }
 
 }

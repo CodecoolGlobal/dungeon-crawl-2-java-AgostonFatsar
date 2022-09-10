@@ -15,9 +15,6 @@ public class Potion extends Item{
 
     @Override
     public void act(GameMap map) {
-
-       int currentHealth = getCell().getActor().getHealth();
-        getCell().getActor().setHealth(currentHealth+2);
-
+        cell.getActor().increaseHealth(2);
     }
 }

@@ -12,7 +12,7 @@ public abstract class Actor implements Drawable {
 
     protected int health;
 
-    private int damage;
+    private final int damage;
 
     protected boolean isAlive;
 
@@ -31,21 +31,16 @@ public abstract class Actor implements Drawable {
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
-        if (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton") ||
-                nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto") ||
-                nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion"))
+        if (nextCellIsEnemy(nextCell))
             confrontation(nextCell);
-        else if (nextCell.getTileName().equals("wall") || nextCell.getTileName().equals("mud") || nextCell.getTileName().equals("road") ||  (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
-                (nextCell.getTileName().equals("closedDoor") && (!checkPlayerItem("Successfully saved Chameleon!") ||
-                        !checkPlayerItem("Successfully saved Panda!") || !checkPlayerItem("Successfully saved Lion!"))) ||
-                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("lion") && !checkPlayerItem("tranqgun")) ||
-                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Chameleon!") && !checkPlayerItem("chameleon")) ||
-                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Panda!") && !checkPlayerItem("panda")) ||
-                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Lion!") && !checkPlayerItem("lion"))) {
-        } else {
-            cell.setActor(null);
-            nextCell.setActor(this);
-            cell = nextCell;
+
+            // TODO: csináljunk functionöket a nagy else if ágnak is. ctrl alt m a billkombó, a zárójelen belüli részt kell kijelölni.
+        else {
+            if (!cannotStepOnNextCell(nextCell)) {
+                cell.setActor(null);
+                nextCell.setActor(this);
+                cell = nextCell;
+            }
         }
     }
 
@@ -73,6 +68,22 @@ public abstract class Actor implements Drawable {
         }
     }
 
+    private boolean cannotStepOnNextCell(Cell nextCell) {
+        return nextCell.getTileName().equals("wall") || nextCell.getTileName().equals("mud") || nextCell.getTileName().equals("road") || (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
+                (nextCell.getTileName().equals("closedDoor") && (!checkPlayerItem("Successfully saved Chameleon!") ||
+                        !checkPlayerItem("Successfully saved Panda!") || !checkPlayerItem("Successfully saved Lion!"))) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("lion") && !checkPlayerItem("tranqgun")) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Chameleon!") && !checkPlayerItem("chameleon")) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Panda!") && !checkPlayerItem("panda")) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Lion!") && !checkPlayerItem("lion"));
+    }
+
+    private static boolean nextCellIsEnemy(Cell nextCell) {
+        return nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton") ||
+                nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto") ||
+                nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion");
+    }
+
 
     public int getHealth() {
         return health;
@@ -80,6 +91,10 @@ public abstract class Actor implements Drawable {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public void increaseHealth(int increasement){
+        this.health += increasement;
     }
 
     public Cell getCell() {
