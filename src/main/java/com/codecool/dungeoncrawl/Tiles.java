@@ -31,7 +31,7 @@ public class Tiles {
         tileMap.put("player", new Tile(25, 1));
         tileMap.put("skeleton", new Tile(30, 9));
         tileMap.put("potion", new Tile(26, 23));
-        tileMap.put("tranqgun", new Tile(20, 29));
+        tileMap.put("Tranquilizer Gun", new Tile(20, 29));
         tileMap.put("auto", new Tile(13, 23));
         tileMap.put("lion", new Tile(30, 7));
         tileMap.put("panda", new Tile(18, 7));
