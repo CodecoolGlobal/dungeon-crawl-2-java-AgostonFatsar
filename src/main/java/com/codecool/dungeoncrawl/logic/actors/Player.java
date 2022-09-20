@@ -41,4 +41,8 @@ public class Player extends Actor {
     public  void eraseItems() {
         items.clear();
     }
+
+    public String getName() {
+        return "name";
+    }
 }
