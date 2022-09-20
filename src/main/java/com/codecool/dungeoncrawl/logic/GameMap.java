@@ -1,22 +1,27 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.*;
-import com.codecool.dungeoncrawl.logic.items.Chameleon;
+import com.codecool.dungeoncrawl.logic.items.animals.Chameleon;
 import com.codecool.dungeoncrawl.logic.items.Item;
-import com.codecool.dungeoncrawl.logic.items.LionItem;
-import com.codecool.dungeoncrawl.logic.items.Panda;
+import com.codecool.dungeoncrawl.logic.items.animals.LionItem;
+import com.codecool.dungeoncrawl.logic.items.animals.Panda;
 
 import java.util.ArrayList;
 
 public class GameMap {
-    private int width;
-    private int height;
-    private Cell[][] cells;
+    private final int width;
+    private final int height;
+    private final Cell[][] cells;
+
+
 
     private Player player;
-    private Skeleton skeleton;
+    private Trump trump;
+    public ArrayList<Actor> actors = new ArrayList<>();
 
-    private ArrayList<Skeleton> skeletons = new ArrayList<Skeleton>();
+    public ArrayList<Item> itemsThatMove = new ArrayList<>();
+
+    private final ArrayList<Trump> trumps = new ArrayList<Trump>();
     private Panda panda;
 
     private Chameleon chameleon;
@@ -35,6 +40,26 @@ public class GameMap {
                 cells[x][y] = new Cell(this, x, y, defaultCellType);
             }
         }
+    }
+
+    public Iterable<Actor> getActorsList(){
+        return actors;
+    }
+
+    public Iterable<Item> getItemsList(){
+        return itemsThatMove;
+    }
+
+    public void fillUpActorsList(){
+        actors.add(this.auto);
+        actors.add(this.player);
+        actors.add(this.lion);
+        actors.addAll(trumps);
+    }
+
+    public void fillUpItemsList(){
+        itemsThatMove.add(this.chameleon);
+        itemsThatMove.add(this.panda);
     }
 
     public Cell getCell(int x, int y) {
@@ -57,8 +82,8 @@ public class GameMap {
     public Player getPlayer() {
         return player;
     }
-    public Skeleton getSkeleton() {
-        return skeleton;
+    public Trump getSkeleton() {
+        return trump;
     }
 
     public Lion getLion(){
@@ -77,8 +102,8 @@ public class GameMap {
         this.panda = panda;
     }
 
-    public void setSkeleton(Skeleton skeleton) {
-        this.skeleton = skeleton;
+    public void setSkeleton(Trump trump) {
+        this.trump = trump;
     }
 
     public Auto getAuto() {
@@ -97,12 +122,12 @@ public class GameMap {
         return height;
     }
 
-    public ArrayList<Skeleton> getSkeletons() {
-        return skeletons;
+    public ArrayList<Trump> getTrumps() {
+        return trumps;
     }
 
-    public  void addSkeleton(Skeleton skeleton) {
-        skeletons.add(skeleton);
+    public  void addTrumps(Trump trump) {
+        trumps.add(trump);
     }
 
     public void switchLion(Item item){
@@ -110,5 +135,6 @@ public class GameMap {
         Cell lionCell = getLion().getCell();
         lionCell.setActor(null);
         lionCell.setItem(new LionItem(lionCell));
+
     }
 }

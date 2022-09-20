@@ -1,15 +1,14 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
-import com.codecool.dungeoncrawl.Util;
 import com.codecool.dungeoncrawl.logic.Cell;
 
-public class Skeleton extends Actor {
+public class Trump extends Actor {
     private Cell cell = super.getCell();
     private static int damage = 2;
 
 
 
-    public Skeleton(Cell cell) {
+    public Trump(Cell cell) {
         super(cell, damage);
         super.setHealth(10);
     }
@@ -21,7 +20,7 @@ public class Skeleton extends Actor {
 
 
 
-    public void moveEnemy(Player player) {
+    public void move(Player player) {
         int y = player.getY();
         Cell originalCell = getCell();
         int OwnY = this.getY();
@@ -57,21 +56,5 @@ public class Skeleton extends Actor {
         }
     }
 
-    public void moveSkeleton() {
-        Cell originalCell = getCell();
-
-        int randomNumber = Util.generateRandomInteger(5);
-
-        if(randomNumber == 0) {
-            Cell nextCell = originalCell.getNeighbor(-1, 0);
-            checkCellAndMove(nextCell);
-        }else if(randomNumber == 1) {
-            Cell nextCell = originalCell.getNeighbor(+1, 0);
-            checkCellAndMove(nextCell);
-        }else if(randomNumber == 2) {
-            Cell nextCell = originalCell.getNeighbor(0, -1);
-            checkCellAndMove(nextCell);
-        }else checkNextCell(randomNumber == 3, originalCell, 0, +1);
-    }
 
 }

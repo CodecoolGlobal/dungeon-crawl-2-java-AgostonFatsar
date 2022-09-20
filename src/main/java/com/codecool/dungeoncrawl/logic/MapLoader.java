@@ -1,8 +1,17 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.*;
-import com.codecool.dungeoncrawl.logic.actors.Skeleton;
-import com.codecool.dungeoncrawl.logic.items.*;
+import com.codecool.dungeoncrawl.logic.actors.Trump;
+import com.codecool.dungeoncrawl.logic.items.animals.Chameleon;
+import com.codecool.dungeoncrawl.logic.items.animals.Panda;
+import com.codecool.dungeoncrawl.logic.items.cages.ChameleonCage;
+import com.codecool.dungeoncrawl.logic.items.cages.LionCage;
+import com.codecool.dungeoncrawl.logic.items.cages.PandaCage;
+import com.codecool.dungeoncrawl.logic.items.other.NewGame;
+import com.codecool.dungeoncrawl.logic.items.other.NextLevel;
+import com.codecool.dungeoncrawl.logic.items.tools.Potion;
+import com.codecool.dungeoncrawl.logic.items.other.Quit;
+import com.codecool.dungeoncrawl.logic.items.tools.TranquilizerGun;
 
 import java.io.InputStream;
 import java.util.Scanner;
@@ -47,9 +56,9 @@ public class MapLoader {
                             break;
                         case 's':
                             cell.setType(CellType.FLOOR);
-                            Skeleton skeleton = new Skeleton(cell);
-                            map.setSkeleton(skeleton);
-                            map.addSkeleton(skeleton);
+                            Trump trump = new Trump(cell);
+                            map.setSkeleton(trump);
+                            map.addTrumps(trump);
                             break;
                         case 'p':
                             cell.setType(CellType.FLOOR);

@@ -1,11 +1,12 @@
-package com.codecool.dungeoncrawl.logic.items;
+package com.codecool.dungeoncrawl.logic.items.animals;
 
 import com.codecool.dungeoncrawl.Util;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Item;
 
-public class Panda extends Item{
+public class Panda extends Item {
 
     public Panda (Cell cell){
         super(cell);

@@ -11,7 +11,18 @@ public class Player extends Actor {
     private static int damage = 5;
     public Player(Cell cell) {
         super(cell, damage);
-        super.setHealth(40);
+        super.setHealth(35);
+    }
+
+    public void move(int dx, int dy) {
+        Cell nextCell = getCell().getNeighbor(dx, dy);
+        if (super.nextCellIsEnemy(nextCell))
+            confrontation(nextCell);
+        else {
+            if (!super.cannotStepOnNextCell(nextCell)) {
+                super.moveActorToNextCell(nextCell);
+            }
+        }
     }
 
 
