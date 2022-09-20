@@ -1,10 +1,11 @@
-package com.codecool.dungeoncrawl.logic.items;
+package com.codecool.dungeoncrawl.logic.items.other;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Item;
 
-public class NewGame extends Item{
+public class NewGame extends Item {
 
     public NewGame(Cell cell) {
         super(cell);

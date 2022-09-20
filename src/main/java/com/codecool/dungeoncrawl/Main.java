@@ -14,7 +14,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -32,6 +31,7 @@ public class Main extends Application {
     Button pickUpButton = new Button("Pick Up");
 
 
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -43,10 +43,8 @@ public class Main extends Application {
         ui.setPadding(new Insets(10));
 
         ui.add(new Label("Player Health: "), 0, 0);
-        //ui.add(new Label("Capitalist Health: "), 0, 1);
 
         ui.add(healthLabel, 1, 0);
-        //ui.add(monsterHealthLabel, 1, 1);
         ui.add(pickUpButton, 0, 3);
         ui.add(inventoryLabel, 0, 4);
 
@@ -57,8 +55,9 @@ public class Main extends Application {
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
+        map.fillUpActorsList();
+        map.fillUpItemsList();
         refresh();
-        //scene.setOnAction(pickUpButton::onMouseClicked);
         pickUpButton.setFocusTraversable(false);
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
@@ -69,18 +68,13 @@ public class Main extends Application {
                 Cell playerCell = map.getPlayer().getCell();
                 if (playerCell.getItem() != null){
                     playerCell.getItem().act(map);
-                    //if (playerCell.getItem().getTileName().equals("tranqgun")){
-                        //map.switchLion();
-                    //}
-                    // TODO: átírni a tranq gun lion change-jét a map objectbe,
+
                     if (!(playerCell.getItem().getTileName().equals("Successfully saved Lion!")) &&
                             !(playerCell.getItem().getTileName().equals("Successfully saved Chameleon!")) &&
                             !(playerCell.getItem().getTileName().equals("Successfully saved Panda!"))) {
                         playerCell.setItem(null);
                     }
                 }
-                //item = map.getItem();
-                //inventory.add(item;
                 refresh();
             }
         });
@@ -93,81 +87,32 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
-                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
-                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
-                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
-                if(map.getAuto() != null) map.getAuto().moveCar();
                 refresh();
                 break;
         }
     }
 
     private void refresh() {
-        if (map.getSkeleton() != null) {
-            for (Skeleton skeleton : map.getSkeletons()) {
-                if (skeleton.isAlive()) {
-                    skeleton.moveEnemy(map.getPlayer());
-                    skeleton.moveEnemy(map.getPlayer());
-                }
-            }
-        }
-        if (map.getAuto() != null) map.getAuto().moveCar();
-        if (map.getChameleon() != null) map.getChameleon().moveChameleon();
-        if (map.getPanda() != null) map.getPanda().movePanda();
-        context.setFill(Color.BLACK);
-        context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
-                Cell cell = map.getCell(x, y);
-                if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y);
-                } else if (cell.getItem() != null) {
-                    Tiles.drawTile(context, cell.getItem(), x, y);
-                } else {
-                    Tiles.drawTile(context, cell, x, y);
-                }
-            }
-        }
-        //if (map.getSkeleton() != null) monsterHealthLabel.setText("" + map.getSkeleton().getHealth());
-        healthLabel.setText("" + map.getPlayer().getHealth());
-        String inventoryText = inventory(map.getPlayer().getCell().getNeighbor(0,-1).getTileName());
-        inventoryLabel.setText("" + inventoryText);
+        moveActorsAndItems();
+        drawCanvas();
+        updateLabels();
         checkDoorPassing();
-        if (map.getPlayer().checkPlayerItem("quit")) {
-            System.exit(1);
-        }
-        if (map.getPlayer().checkPlayerItem("newgame")) {
-            map.getPlayer().eraseItems();
-            map = MapLoader.loadMap(1);
-        }
-        if (!(map.getPlayer().isAlive())) {
-            map.getPlayer().eraseItems();
-            map = MapLoader.loadMap(0);
-        }
-        if (map.getPlayer().checkPlayerItem("nextlevel")) {
-            map.getPlayer().eraseItems();
-            map = MapLoader.loadMap(2);
-        }
-
-
-    }
-
-    private void checkDoorPassing() {
-        if (map.getPlayer().getCell().getTileName().equals("closedDoor")){
-            map.getPlayer().getCell().setType(CellType.OPENDOOR);
-        }
+        checkQuit();
+        checkIfNewMapNeeded(!(map.getPlayer().isAlive()), 0);
+        checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("newgame"), 1);
+        checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("nextlevel"), 2);
     }
 
     private String inventory(String cellType){
@@ -189,6 +134,63 @@ public class Main extends Application {
         }
 
         return sb.toString();
+    }
+
+    private void checkQuit() {
+        if (map.getPlayer().checkIfPlayerHasItem("quit")) {
+            System.exit(1);
+        }
+    }
+
+    private void checkIfNewMapNeeded(Boolean hasItem, int mapNr) {
+        if (hasItem) {
+            map.getPlayer().eraseItems();
+            map = MapLoader.loadMap(mapNr);
+        }
+    }
+
+    private void updateLabels() {
+        healthLabel.setText("" + map.getPlayer().getHealth());
+        String inventoryText = inventory(map.getPlayer().getCell().getNeighbor(0,-1).getTileName());
+        inventoryLabel.setText("" + inventoryText);
+    }
+
+    private void drawCanvas() {
+        context.setFill(Color.BLACK);
+        context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        for (int x = 0; x < map.getWidth(); x++) {
+            for (int y = 0; y < map.getHeight(); y++) {
+                Cell cell = map.getCell(x, y);
+                if (cell.getActor() != null) {
+                    Tiles.drawTile(context, cell.getActor(), x, y);
+                } else if (cell.getItem() != null) {
+                    Tiles.drawTile(context, cell.getItem(), x, y);
+                } else {
+                    Tiles.drawTile(context, cell, x, y);
+                }
+            }
+        }
+    }
+
+    private void moveActorsAndItems() {
+        if (map.getSkeleton() != null) {
+            for (Trump trump : map.getTrumps()) {
+                if (trump.isAlive()) {
+                    trump.move(map.getPlayer());
+                    trump.move(map.getPlayer());
+                }
+            }
+        }
+        if (map.getAuto() != null) map.getAuto().move();
+        if (map.getAuto() != null) map.getAuto().move();
+        if (map.getChameleon() != null) map.getChameleon().moveChameleon();
+        if (map.getPanda() != null) map.getPanda().movePanda();
+    }
+
+    private void checkDoorPassing() {
+        if (map.getPlayer().getCell().getTileName().equals("closedDoor")){
+            map.getPlayer().getCell().setType(CellType.OPENDOOR);
+        }
     }
 }
 

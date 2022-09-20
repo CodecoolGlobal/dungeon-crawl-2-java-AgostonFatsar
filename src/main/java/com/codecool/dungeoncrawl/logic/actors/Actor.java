@@ -2,13 +2,10 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
-import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.items.Item;
 
-import java.util.ArrayList;
-
-public abstract class Actor implements Drawable {
-    private Cell cell;
+public abstract class Actor implements Drawable{
+    protected Cell cell;
 
     protected int health;
 
@@ -25,65 +22,11 @@ public abstract class Actor implements Drawable {
 
     }
 
+    //GETTER AND SETTERS
+
     public int getDamage() {
         return damage;
     }
-
-    public void move(int dx, int dy) {
-        Cell nextCell = cell.getNeighbor(dx, dy);
-        if (nextCellIsEnemy(nextCell))
-            confrontation(nextCell);
-
-            // TODO: csináljunk functionöket a nagy else if ágnak is. ctrl alt m a billkombó, a zárójelen belüli részt kell kijelölni.
-        else {
-            if (!cannotStepOnNextCell(nextCell)) {
-                cell.setActor(null);
-                nextCell.setActor(this);
-                cell = nextCell;
-            }
-        }
-    }
-
-    protected void confrontation(Cell nextCell) {
-
-        nextCell.getActor().beingAttacked(this);
-        if (!nextCell.getActor().isAlive) {
-            nextCell.setActor(null);
-        } else {
-            this.beingAttacked(nextCell.getActor());
-        }
-/*        int enemyHealth = enemy.getHealth();
-        health -= 2;
-        enemy.setHealth(enemyHealth - 5);
-        enemyHealth = enemy.getHealth();
-        if (enemyHealth < 1) {
-            enemy.getCell().setActor(null);
-        } else if (health < 1) this.getCell().setActor(null);*/
-    }
-
-    public void beingAttacked(Actor attacker) {
-        health -= attacker.getDamage();
-        if (health < 1) {
-            isAlive = false;
-        }
-    }
-
-    private boolean cannotStepOnNextCell(Cell nextCell) {
-        return nextCell.getTileName().equals("wall") || nextCell.getTileName().equals("mud") || nextCell.getTileName().equals("road") || (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
-                (nextCell.getTileName().equals("closedDoor") && (!checkPlayerItem("Successfully saved Chameleon!") ||
-                        !checkPlayerItem("Successfully saved Panda!") || !checkPlayerItem("Successfully saved Lion!"))) ||
-                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("lion") && !checkPlayerItem("tranqgun")) ||
-                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Chameleon!") && !checkPlayerItem("chameleon")) ||
-                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Panda!") && !checkPlayerItem("panda")) ||
-                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Lion!") && !checkPlayerItem("lion"));
-    }
-
-    private static boolean nextCellIsEnemy(Cell nextCell) {
-        return nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton") ||
-                nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto") ||
-                nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion");
-    }
-
 
     public int getHealth() {
         return health;
@@ -93,8 +36,8 @@ public abstract class Actor implements Drawable {
         this.health = health;
     }
 
-    public void increaseHealth(int increasement){
-        this.health += increasement;
+    public void increaseHealth(int increment){
+        this.health += increment;
     }
 
     public Cell getCell() {
@@ -118,7 +61,43 @@ public abstract class Actor implements Drawable {
         return isAlive;
     }
 
-    public boolean checkPlayerItem(String requiredKey) {
+
+    // HELPER METHODS FOR PLAYER MOVEMENT
+
+    void moveActorToNextCell(Cell nextCell) {
+        cell.setActor(null);
+        nextCell.setActor(this);
+        cell = nextCell;
+    }
+
+    protected void confrontation(Cell nextCell) {
+
+        nextCell.getActor().beingAttacked(this);
+        if (!nextCell.getActor().isAlive) {
+            nextCell.setActor(null);
+        } else {
+            this.beingAttacked(nextCell.getActor());
+        }
+    }
+
+    public void beingAttacked(Actor attacker) {
+        health -= attacker.getDamage();
+        if (health < 1) {
+            isAlive = false;
+        }
+    }
+
+    protected boolean cannotStepOnNextCell(Cell nextCell) {
+        return nextCell.getTileName().equals("wall") || nextCell.getTileName().equals("mud") || nextCell.getTileName().equals("road") || (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
+                (nextCell.getTileName().equals("closedDoor") && (!checkIfPlayerHasItem("Successfully saved Chameleon!") ||
+                        !checkIfPlayerHasItem("Successfully saved Panda!") || !checkIfPlayerHasItem("Successfully saved Lion!"))) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("lion") && !checkIfPlayerHasItem("Tranquilizer Gun")) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Chameleon!") && !checkIfPlayerHasItem("chameleon")) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Panda!") && !checkIfPlayerHasItem("panda")) ||
+                (nextCell.getItem() != null && nextCell.getItem().getTileName().equals("Successfully saved Lion!") && !checkIfPlayerHasItem("lion"));
+    }
+
+    public boolean checkIfPlayerHasItem(String requiredKey) {
         boolean hasItem = false;
         Player player = (Player) this;
         for (Item item : player.getItems()) {
@@ -128,4 +107,15 @@ public abstract class Actor implements Drawable {
         }
         return hasItem;
     }
+
+    protected static boolean nextCellIsEnemy(Cell nextCell) {
+        return nextCell.getActor() != null && nextCell.getActor().getTileName().equals("skeleton") ||
+                nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto") ||
+                nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion");
+    }
+
+
+
+
+
 }

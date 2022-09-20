@@ -10,15 +10,13 @@ public class Lion extends Actor{
 
     public Lion(Cell cell){
         super(cell, damage);
-        setHealth(1000);
+        setHealth(10000);
     }
 
     @Override
     public String getTileName() {
         return "lion";
     }
-
-
 
 
 }

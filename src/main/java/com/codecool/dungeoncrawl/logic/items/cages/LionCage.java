@@ -1,10 +1,11 @@
-package com.codecool.dungeoncrawl.logic.items;
+package com.codecool.dungeoncrawl.logic.items.cages;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.items.animals.LionItem;
 
-public class LionCage extends Item{
+public class LionCage extends Item {
 
     public LionCage (Cell cell){
         super(cell);

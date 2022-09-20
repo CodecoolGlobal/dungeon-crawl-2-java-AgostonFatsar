@@ -4,7 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 
-public class Auto extends Actor {
+public class Auto extends Actor{
     private Cell cell = super.getCell();
 
     private static int damage = 100;
@@ -26,20 +26,30 @@ public class Auto extends Actor {
     }
 
 
-    public void moveCar() {
+    public void move() {
         Cell nextCell = cell.getNeighbor(1, 0);
-        if (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("player")){
+        if (nextCellIsPlayer(nextCell)){
             confrontation(nextCell);
         }
         else if (nextCell.getTileName().equals("wall")) {
-            cell.setActor(null);
-            cell = startCell.getNeighbor(-1,0);
+            teleportToStartCell();
         } else {
-            cell.setActor(null);
-            nextCell.setActor(this);
-            cell = nextCell;
+            moveActorToNextCell(nextCell);
         }
+    }
 
+    public void moveActorToNextCell(Cell nextCell){
+        cell.setActor(null);
+        nextCell.setActor(this);
+        cell = nextCell;
+    }
 
+    private void teleportToStartCell() {
+        cell.setActor(null);
+        cell = startCell.getNeighbor(-1,0);
+    }
+
+    private static boolean nextCellIsPlayer(Cell nextCell) {
+        return nextCell.getActor() != null && nextCell.getActor().getTileName().equals("player");
     }
 }
