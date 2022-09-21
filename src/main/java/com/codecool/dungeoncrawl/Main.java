@@ -36,6 +36,7 @@ public class Main extends Application {
     Label inventoryLabel = new Label();
     Button pickUpButton = new Button("Pick Up");
 
+    GameDatabaseManager gameDatabaseManager;
 
 
 
@@ -45,7 +46,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GameDatabaseManager gameDatabaseManager = new GameDatabaseManager();
+        gameDatabaseManager = new GameDatabaseManager();
         gameDatabaseManager.setup();
         gameDatabaseManager.savePlayer( map.getPlayer());
         GridPane ui = new GridPane();
@@ -89,7 +90,14 @@ public class Main extends Application {
             }
         });
         scene.setOnKeyPressed(this::onKeyPressed);
+
+       /* PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
+        playerModel.setHp(map.getPlayer().getHealth());
+        playerModel.setX(map.getPlayer().getX());
+        playerModel.setY(map.getPlayer().getY());
+        playerModel.setPlayerName(map.getPlayer().getName());
         gameDatabaseManager.getPlayerDao().update(gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName()));
+   */
     }
 
 
@@ -124,6 +132,12 @@ public class Main extends Application {
         checkIfNewMapNeeded(!(map.getPlayer().isAlive()), 0);
         checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("newgame"), 1);
         checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("nextlevel"), 2);
+        PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
+        playerModel.setHp(map.getPlayer().getHealth());
+        playerModel.setX(map.getPlayer().getX());
+        playerModel.setY(map.getPlayer().getY());
+        playerModel.setPlayerName(map.getPlayer().getName());
+        gameDatabaseManager.getPlayerDao().update(playerModel);
     }
 
     private String inventory(String cellType){
