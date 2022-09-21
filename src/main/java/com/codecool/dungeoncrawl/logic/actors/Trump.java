@@ -1,9 +1,9 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.GameMap;
 
 public class Trump extends Actor {
-    private Cell cell = super.getCell();
     private static int damage = 2;
 
 
@@ -20,28 +20,28 @@ public class Trump extends Actor {
 
 
 
-    public void move(Player player) {
-        int y = player.getY();
-        Cell originalCell = getCell();
-        int OwnY = this.getY();
-        int x = player.getX();
-        int OwnX = this.getX();
+    public void move(Player player, GameMap map) {
+        int playerX = player.getCell(player.getTileName(), map).getX();
+        int playerY = player.getCell(player.getTileName(), map).getY();
+        int OwnX = getCell(this.getTileName(), map).getX();
+        int OwnY = getCell(this.getTileName(), map).getY();
+        Cell currentCell = getCell(player.getTileName(), map);
         if (isAlive) {
-            checkNextCell(OwnX > x, originalCell, -1, 0);
-            checkNextCell(OwnX < x, originalCell, +1, 0);
-            checkNextCell(OwnY > y, originalCell, 0, -1);
-            checkNextCell(OwnY < y, originalCell, 0, +1);
+            checkNextCell(OwnX > playerX, currentCell, -1, 0, currentCell);
+            checkNextCell(OwnX < playerY, currentCell, +1, 0, currentCell);
+            checkNextCell(OwnY > playerX, currentCell, 0, -1, currentCell);
+            checkNextCell(OwnY < playerY, currentCell, 0, +1, currentCell);
         }
     }
 
-    private void checkNextCell(boolean OwnX, Cell originalCell, int dx, int dy) {
+    private void checkNextCell(boolean OwnX, Cell originalCell, int dx, int dy, Cell currentCell) {
         if (OwnX) {
             Cell nextCell = originalCell.getNeighbor(dx, dy);
-            checkCellAndMove(nextCell);
+            checkCellAndMove(nextCell, currentCell);
         }
     }
 
-    public void checkCellAndMove(Cell nextCell) {
+    public void checkCellAndMove(Cell nextCell, Cell currentCell) {
 
         if (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("player")){
             confrontation(nextCell);
@@ -50,9 +50,7 @@ public class Trump extends Actor {
                 (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion")) ||
                 (nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto"))) {
         } else {
-            getCell().setActor(null);
-            nextCell.setActor(this);
-            setCell(nextCell);
+            moveActorToNextCell(nextCell, currentCell);
         }
     }
 

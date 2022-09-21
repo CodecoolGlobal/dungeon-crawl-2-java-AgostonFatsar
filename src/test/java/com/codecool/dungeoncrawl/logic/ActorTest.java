@@ -7,48 +7,49 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActorTest {
-    GameMap gameMap = new GameMap(3, 3, CellType.FLOOR);
+    GameMap map = new GameMap(3, 3, CellType.FLOOR);
+
 
     @Test
     void moveUpdatesCells() {
-        Player player = new Player(gameMap.getCell(1, 1));
-        player.move(1, 0);
+        Player player = new Player(map.getCell(1, 1));
+        player.move(1, 0, map);
 
-        assertEquals(2, player.getX());
-        assertEquals(1, player.getY());
-        assertEquals(null, gameMap.getCell(1, 1).getActor());
-        assertEquals(player, gameMap.getCell(2, 1).getActor());
+        assertEquals(2, player.getCell(player.getTileName(), map).getX());
+        assertEquals(1, player.getCell(player.getTileName(), map).getY());
+        assertEquals(null, map.getCell(1, 1).getActor());
+        assertEquals(player, map.getCell(2, 1).getActor());
     }
 
     @Test
     void cannotMoveIntoWall() {
-        gameMap.getCell(2, 1).setType(CellType.WALL);
-        Player player = new Player(gameMap.getCell(1, 1));
-        player.move(1, 0);
+        map.getCell(2, 1).setType(CellType.WALL);
+        Player player = new Player(map.getCell(1, 1));
+        player.move(1, 0, map);
 
-        assertEquals(1, player.getX());
-        assertEquals(1, player.getY());
+        assertEquals(1, player.getCell(player.getTileName(), map).getX());
+        assertEquals(1, player.getCell(player.getTileName(), map).getY());
     }
 
     @Test
     void cannotMoveOutOfMap() {
-        Player player = new Player(gameMap.getCell(2, 1));
-        player.move(1, 0);
+        Player player = new Player(map.getCell(2, 1));
+        player.move(1, 0, map);
 
-        assertEquals(2, player.getX());
-        assertEquals(1, player.getY());
+        assertEquals(2, player.getCell(player.getTileName(), map).getX());
+        assertEquals(1, player.getCell(player.getTileName(), map).getX());
     }
 
     @Test
     void cannotMoveIntoAnotherActor() {
-        Player player = new Player(gameMap.getCell(1, 1));
-        Trump trump = new Trump(gameMap.getCell(2, 1));
-        player.move(1, 0);
+        Player player = new Player(map.getCell(1, 1));
+        Trump trump = new Trump(map.getCell(2, 1));
+        player.move(1, 0, map);
 
-        assertEquals(1, player.getX());
-        assertEquals(1, player.getY());
-        assertEquals(2, trump.getX());
-        assertEquals(1, trump.getY());
-        assertEquals(trump, gameMap.getCell(2, 1).getActor());
+        assertEquals(1, player.getCell(player.getTileName(), map).getX());
+        assertEquals(1, player.getCell(player.getTileName(), map).getY());
+        assertEquals(2, trump.getCell(player.getTileName(), map).getX());
+        assertEquals(1, trump.getCell(player.getTileName(), map).getY());
+        assertEquals(trump, map.getCell(2, 1).getActor());
     }
 }

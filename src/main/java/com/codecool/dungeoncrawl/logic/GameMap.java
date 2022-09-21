@@ -7,16 +7,23 @@ import com.codecool.dungeoncrawl.logic.items.animals.LionItem;
 import com.codecool.dungeoncrawl.logic.items.animals.Panda;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GameMap {
     private final int width;
     private final int height;
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
     private final Cell[][] cells;
 
 
 
     private Player player;
     private Trump trump;
+
     public ArrayList<Actor> actors = new ArrayList<>();
 
     public ArrayList<Item> itemsThatMove = new ArrayList<>();
@@ -132,9 +139,17 @@ public class GameMap {
 
     public void switchLion(Item item){
         player.getItems().add(item);
-        Cell lionCell = getLion().getCell();
-        lionCell.setActor(null);
-        lionCell.setItem(new LionItem(lionCell));
+        for (Cell [] ListOfCells : cells){
+            for(Cell cell : ListOfCells){
+                if (cell.getActor() != null){
+                    if(Objects.equals(cell.getActor().getTileName(), "lion")) {
+                        cell.setActor(null);
+                        cell.setItem(new LionItem(cell));
+                    }
+                }
+            }
+        }
+
 
     }
 }

@@ -4,21 +4,21 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 
+import java.util.Currency;
+
 public class Auto extends Actor{
-    private Cell cell = super.getCell();
 
     private static int damage = 100;
 
     public Auto(Cell cell) {
         super(cell, damage);
-        startCell = cell;
         setHealth(1000);
     }
 
-    int startX = 3;
-    int startY = 1;
+    int startX = 1;
+    int startY = 8;
 
-    Cell startCell;
+
 
     @Override
     public String getTileName() {
@@ -26,27 +26,24 @@ public class Auto extends Actor{
     }
 
 
-    public void move() {
-        Cell nextCell = cell.getNeighbor(1, 0);
+    public void move(GameMap map) {
+        Cell currentCell = getCell(getTileName(), map);
+        Cell nextCell = currentCell.getNeighbor(1, 0);
         if (nextCellIsPlayer(nextCell)){
             confrontation(nextCell);
         }
-        else if (nextCell.getTileName().equals("wall")) {
-            teleportToStartCell();
+        else if(nextCell.getTileName().equals("wall")) {
+            teleportToStartCell(currentCell, map);
         } else {
-            moveActorToNextCell(nextCell);
+            moveActorToNextCell(nextCell, currentCell);
         }
     }
 
-    public void moveActorToNextCell(Cell nextCell){
-        cell.setActor(null);
-        nextCell.setActor(this);
-        cell = nextCell;
-    }
-
-    private void teleportToStartCell() {
-        cell.setActor(null);
-        cell = startCell.getNeighbor(-1,0);
+    private void teleportToStartCell(Cell currentCell, GameMap map) {
+        Cell startCell = map.getCell(startX, startY);
+        currentCell.setActor(null);
+        currentCell = startCell;
+        currentCell.setActor(this);
     }
 
     private static boolean nextCellIsPlayer(Cell nextCell) {

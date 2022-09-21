@@ -19,7 +19,7 @@ public class PandaCage extends Item {
     public void act(GameMap map) {
         map.getPlayer().getItems().add(this);
         map.getPlayer().getItems().removeIf(item -> item.getTileName().equals("panda"));
-        Cell pandaCell = map.getPlayer().getCell().getNeighbor(0,-1);
+        Cell pandaCell = map.getPlayer().getCell(map.getPlayer().getTileName(), map).getNeighbor(0,-1);
         pandaCell.setItem(new Panda(pandaCell));
     }
 

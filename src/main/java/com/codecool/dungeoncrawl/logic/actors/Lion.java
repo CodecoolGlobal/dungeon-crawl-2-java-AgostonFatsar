@@ -4,7 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 
 public class Lion extends Actor{
 
-    private Cell cell = super.getCell();
+
 
     private static int damage = 3;
 

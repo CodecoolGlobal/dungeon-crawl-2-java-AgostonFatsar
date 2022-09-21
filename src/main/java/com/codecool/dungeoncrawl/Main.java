@@ -65,7 +65,7 @@ public class Main extends Application {
         pickUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Cell playerCell = map.getPlayer().getCell();
+                Cell playerCell = map.getPlayer().getCell(map.getPlayer().getTileName(), map);
                 if (playerCell.getItem() != null){
                     playerCell.getItem().act(map);
 
@@ -86,19 +86,19 @@ public class Main extends Application {
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case UP:
-                map.getPlayer().move(0, -1);
+                map.getPlayer().move(0, -1, map);
                 refresh();
                 break;
             case DOWN:
-                map.getPlayer().move(0, 1);
+                map.getPlayer().move(0, 1, map);
                 refresh();
                 break;
             case LEFT:
-                map.getPlayer().move(-1, 0);
+                map.getPlayer().move(-1, 0, map);
                 refresh();
                 break;
             case RIGHT:
-                map.getPlayer().move(1, 0);
+                map.getPlayer().move(1, 0, map);
                 refresh();
                 break;
         }
@@ -151,7 +151,7 @@ public class Main extends Application {
 
     private void updateLabels() {
         healthLabel.setText("" + map.getPlayer().getHealth());
-        String inventoryText = inventory(map.getPlayer().getCell().getNeighbor(0,-1).getTileName());
+        String inventoryText = inventory(map.getPlayer().getCell(map.getPlayer().getTileName(), map).getNeighbor(0,-1).getTileName());
         inventoryLabel.setText("" + inventoryText);
     }
 
@@ -176,20 +176,20 @@ public class Main extends Application {
         if (map.getSkeleton() != null) {
             for (Trump trump : map.getTrumps()) {
                 if (trump.isAlive()) {
-                    trump.move(map.getPlayer());
-                    trump.move(map.getPlayer());
+                    trump.move(map.getPlayer(), map);
+//                    trump.move(map.getPlayer(), map);
                 }
             }
         }
-        if (map.getAuto() != null) map.getAuto().move();
-        if (map.getAuto() != null) map.getAuto().move();
+        if (map.getAuto() != null) map.getAuto().move(map);
+        if (map.getAuto() != null) map.getAuto().move(map);
         if (map.getChameleon() != null) map.getChameleon().moveChameleon();
         if (map.getPanda() != null) map.getPanda().movePanda();
     }
 
     private void checkDoorPassing() {
-        if (map.getPlayer().getCell().getTileName().equals("closedDoor")){
-            map.getPlayer().getCell().setType(CellType.OPENDOOR);
+        if (map.getPlayer().getCell(map.getPlayer().getTileName(), map).getTileName().equals("closedDoor")){
+            map.getPlayer().getCell(map.getPlayer().getTileName(), map).setType(CellType.OPENDOOR);
         }
     }
 }
