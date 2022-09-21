@@ -133,11 +133,7 @@ public class Main extends Application {
         checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("newgame"), 1);
         checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("nextlevel"), 2);
         PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
-        playerModel.setHp(map.getPlayer().getHealth());
-        playerModel.setX(map.getPlayer().getX());
-        playerModel.setY(map.getPlayer().getY());
-        playerModel.setPlayerName(map.getPlayer().getName());
-        gameDatabaseManager.getPlayerDao().update(playerModel);
+        updatePlayerTable(playerModel);
     }
 
     private String inventory(String cellType){
@@ -210,6 +206,14 @@ public class Main extends Application {
         if (map.getAuto() != null) map.getAuto().move();
         if (map.getChameleon() != null) map.getChameleon().moveChameleon();
         if (map.getPanda() != null) map.getPanda().movePanda();
+    }
+
+    private void updatePlayerTable(PlayerModel playerModel) {
+        playerModel.setHp(map.getPlayer().getHealth());
+        playerModel.setX(map.getPlayer().getX());
+        playerModel.setY(map.getPlayer().getY());
+        playerModel.setPlayerName(map.getPlayer().getName());
+        gameDatabaseManager.getPlayerDao().update(playerModel);
     }
 
     private void checkDoorPassing() {
