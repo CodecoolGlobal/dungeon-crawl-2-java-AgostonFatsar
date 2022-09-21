@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 public class GameDatabaseManager {
     private  PlayerDao playerDao;
+
     private GameStateDao gameStateDao;
 
     public  void setup() throws SQLException {
@@ -58,5 +59,9 @@ public class GameDatabaseManager {
 
     public PlayerDao getPlayerDao() {
         return playerDao;
+    }
+
+    public GameStateDao getGameStateDao() {
+        return gameStateDao;
     }
 }

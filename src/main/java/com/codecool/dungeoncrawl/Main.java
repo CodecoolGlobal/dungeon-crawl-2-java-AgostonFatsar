@@ -7,6 +7,7 @@ import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.*;
 //import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -141,6 +142,19 @@ public class Main extends Application {
         checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("nextlevel"), 2);
         PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
         updatePlayerTable(playerModel);
+        GameState gameState = gameDatabaseManager.getGameStateDao().get(50); // TODO: Fix it, currently not working for different player ID-s
+        gameState.setPlayer(playerModel);
+        long millis=System.currentTimeMillis();
+        java.sql.Date savedAt=new java.sql.Date(millis);
+        gameState.setSavedAt(savedAt);
+        /*playerModel.setHp(map.getPlayer().getHealth());
+        playerModel.setX(map.getPlayer().getX());
+        playerModel.setY(map.getPlayer().getY());
+        playerModel.setPlayerName(map.getPlayer().getName());
+        gameDatabaseManager.getPlayerDao().update(playerModel);*/
+
+
+
     }
 
     private String inventory(String cellType){
