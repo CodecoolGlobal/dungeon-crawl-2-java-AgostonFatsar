@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import javax.sql.DataSource;
+import java.sql.Date;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap(1);
@@ -38,6 +39,8 @@ public class Main extends Application {
 
     GameDatabaseManager gameDatabaseManager;
 
+    String currentMap = "map1";
+
 
 
     public static void main(String[] args) {
@@ -49,6 +52,10 @@ public class Main extends Application {
         gameDatabaseManager = new GameDatabaseManager();
         gameDatabaseManager.setup();
         gameDatabaseManager.savePlayer( map.getPlayer());
+        PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
+        long millis=System.currentTimeMillis();
+        java.sql.Date savedAt=new java.sql.Date(millis);
+        gameDatabaseManager.saveGameState(currentMap,savedAt, playerModel);
         GridPane ui = new GridPane();
         ui.setPrefWidth(360);
         ui.setPadding(new Insets(10));

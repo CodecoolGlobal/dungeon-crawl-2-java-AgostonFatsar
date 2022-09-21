@@ -12,10 +12,12 @@ import java.util.List;
 public class GameStateDaoJdbc implements GameStateDao {
 
     private DataSource dataSource;
+    private  PlayerDao playerDao;
 
 
-    public GameStateDaoJdbc(DataSource dataSource) {
+    public GameStateDaoJdbc(DataSource dataSource,PlayerDao playerDao) {
         this.dataSource = dataSource;
+        this.playerDao = playerDao;
 
     }
 
@@ -26,7 +28,7 @@ public class GameStateDaoJdbc implements GameStateDao {
             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, state.getCurrentMap());
             st.setDate(2, state.getSavedAt());
-            st.setInt(3, state.getPlayer().getId());
+            st.setInt(3, 50);
             st.executeUpdate();
             ResultSet rs = st.getGeneratedKeys();
             rs.next();
