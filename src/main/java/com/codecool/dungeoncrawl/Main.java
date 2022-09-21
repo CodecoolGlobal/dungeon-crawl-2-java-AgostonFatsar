@@ -1,9 +1,13 @@
 package com.codecool.dungeoncrawl;
 
+import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
+import com.codecool.dungeoncrawl.dao.PlayerDao;
+import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.*;
 //import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +23,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import javax.sql.DataSource;
+
 public class Main extends Application {
     GameMap map = MapLoader.loadMap(1);
     Canvas canvas = new Canvas(
@@ -32,12 +38,16 @@ public class Main extends Application {
 
 
 
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        GameDatabaseManager gameDatabaseManager = new GameDatabaseManager();
+        gameDatabaseManager.setup();
+        gameDatabaseManager.savePlayer( map.getPlayer());
         GridPane ui = new GridPane();
         ui.setPrefWidth(360);
         ui.setPadding(new Insets(10));
@@ -79,6 +89,7 @@ public class Main extends Application {
             }
         });
         scene.setOnKeyPressed(this::onKeyPressed);
+        gameDatabaseManager.getPlayerDao().update(gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName()));
     }
 
 

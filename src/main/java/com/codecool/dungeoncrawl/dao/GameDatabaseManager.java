@@ -8,19 +8,19 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 public class GameDatabaseManager {
-    private PlayerDao playerDao;
+    private  PlayerDao playerDao;
 
-    public void setup() throws SQLException {
+    public  void setup() throws SQLException {
         DataSource dataSource = connect();
         playerDao = new PlayerDaoJdbc(dataSource);
     }
 
-    public void savePlayer(Player player) {
+    public  void savePlayer(Player player) {
         PlayerModel model = new PlayerModel(player);
         playerDao.add(model);
     }
 
-    private DataSource connect() throws SQLException {
+    private  DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         String dbName = System.getenv("PSQL_DB_NAME");
         String user = System.getenv("PSQL_USER_NAME");
@@ -35,5 +35,19 @@ public class GameDatabaseManager {
         System.out.println("Connection ok.");
 
         return dataSource;
+    }
+
+    public int getId(String playerName) {
+        int Id = 0;
+        for (PlayerModel playermodel : playerDao.getAll()) {
+            if (playermodel.getPlayerName().equals(playerName)){
+                Id = playermodel.getId();
+            }
+        }
+        return Id;
+    }
+
+    public PlayerDao getPlayerDao() {
+        return playerDao;
     }
 }
