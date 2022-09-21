@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.GameMap;
 
 public class Trump extends Actor {
     private Cell cell = super.getCell();
@@ -20,23 +21,23 @@ public class Trump extends Actor {
 
 
 
-    public void move(Player player) {
+    public void move(GameMap map, Player player) {
         int y = player.getY();
         Cell originalCell = getCell();
         int OwnY = this.getY();
         int x = player.getX();
         int OwnX = this.getX();
         if (isAlive) {
-            checkNextCell(OwnX > x, originalCell, -1, 0);
-            checkNextCell(OwnX < x, originalCell, +1, 0);
-            checkNextCell(OwnY > y, originalCell, 0, -1);
-            checkNextCell(OwnY < y, originalCell, 0, +1);
+            checkNextCell(map, OwnX > x, originalCell, -1, 0);
+            checkNextCell(map, OwnX < x, originalCell, +1, 0);
+            checkNextCell(map, OwnY > y, originalCell, 0, -1);
+            checkNextCell(map, OwnY < y, originalCell, 0, +1);
         }
     }
 
-    private void checkNextCell(boolean OwnX, Cell originalCell, int dx, int dy) {
+    private void checkNextCell(GameMap map, boolean OwnX, Cell originalCell, int dx, int dy) {
         if (OwnX) {
-            Cell nextCell = originalCell.getNeighbor(dx, dy);
+            Cell nextCell = originalCell.getNeighbor(map, dx, dy);
             checkCellAndMove(nextCell);
         }
     }

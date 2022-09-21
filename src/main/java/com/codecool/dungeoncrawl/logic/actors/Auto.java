@@ -26,13 +26,13 @@ public class Auto extends Actor{
     }
 
 
-    public void move() {
-        Cell nextCell = cell.getNeighbor(1, 0);
+    public void move(GameMap map) {
+        Cell nextCell = cell.getNeighbor(map, 1, 0);
         if (nextCellIsPlayer(nextCell)){
             confrontation(nextCell);
         }
         else if (nextCell.getTileName().equals("wall")) {
-            teleportToStartCell();
+            teleportToStartCell(map);
         } else {
             moveActorToNextCell(nextCell);
         }
@@ -44,9 +44,9 @@ public class Auto extends Actor{
         cell = nextCell;
     }
 
-    private void teleportToStartCell() {
+    private void teleportToStartCell(GameMap map) {
         cell.setActor(null);
-        cell = startCell.getNeighbor(-1,0);
+        cell = startCell.getNeighbor(map, -1,0);
     }
 
     private static boolean nextCellIsPlayer(Cell nextCell) {

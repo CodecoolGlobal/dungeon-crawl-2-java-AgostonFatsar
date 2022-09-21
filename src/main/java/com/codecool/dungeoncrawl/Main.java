@@ -21,6 +21,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap(1);
+
+    Player player;
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
@@ -55,8 +57,6 @@ public class Main extends Application {
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
-        map.fillUpActorsList();
-        map.fillUpItemsList();
         refresh();
         pickUpButton.setFocusTraversable(false);
         primaryStage.setTitle("Dungeon Crawl");
@@ -86,19 +86,19 @@ public class Main extends Application {
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case UP:
-                map.getPlayer().move(0, -1);
+                map.getPlayer().move(map, 0, -1);
                 refresh();
                 break;
             case DOWN:
-                map.getPlayer().move(0, 1);
+                map.getPlayer().move(map, 0, 1);
                 refresh();
                 break;
             case LEFT:
-                map.getPlayer().move(-1, 0);
+                map.getPlayer().move(map, -1, 0);
                 refresh();
                 break;
             case RIGHT:
-                map.getPlayer().move(1, 0);
+                map.getPlayer().move(map, 1, 0);
                 refresh();
                 break;
         }
@@ -151,7 +151,7 @@ public class Main extends Application {
 
     private void updateLabels() {
         healthLabel.setText("" + map.getPlayer().getHealth());
-        String inventoryText = inventory(map.getPlayer().getCell().getNeighbor(0,-1).getTileName());
+        String inventoryText = inventory(map.getPlayer().getCell().getNeighbor(map, 0,-1).getTileName());
         inventoryLabel.setText("" + inventoryText);
     }
 
@@ -173,18 +173,16 @@ public class Main extends Application {
     }
 
     private void moveActorsAndItems() {
-        if (map.getSkeleton() != null) {
-            for (Trump trump : map.getTrumps()) {
-                if (trump.isAlive()) {
-                    trump.move(map.getPlayer());
-                    trump.move(map.getPlayer());
-                }
+        for (Trump trump : map.getTrumps()) {
+            if (trump.isAlive()) {
+                trump.move(map, map.getPlayer());
+                trump.move(map, map.getPlayer());
             }
         }
-        if (map.getAuto() != null) map.getAuto().move();
-        if (map.getAuto() != null) map.getAuto().move();
-        if (map.getChameleon() != null) map.getChameleon().moveChameleon();
-        if (map.getPanda() != null) map.getPanda().movePanda();
+        if (map.getAuto() != null) map.getAuto().move(map);
+        if (map.getAuto() != null) map.getAuto().move(map);
+        if (map.getChameleon() != null) map.getChameleon().moveChameleon(map);
+        if (map.getPanda() != null) map.getPanda().movePanda(map);
     }
 
     private void checkDoorPassing() {

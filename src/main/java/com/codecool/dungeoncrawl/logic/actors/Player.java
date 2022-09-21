@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.items.Item;
 
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ public class Player extends Actor {
         super.setHealth(35);
     }
 
-    public void move(int dx, int dy) {
-        Cell nextCell = getCell().getNeighbor(dx, dy);
+    public void move(GameMap map, int dx, int dy) {
+        Cell nextCell = getCell().getNeighbor(map, dx, dy);
         if (super.nextCellIsEnemy(nextCell))
             confrontation(nextCell);
         else {
