@@ -61,7 +61,6 @@ public class Main extends Application {
         window = primaryStage;
         Scene scene = createScene();
 
-
         pickUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -112,6 +111,8 @@ public class Main extends Application {
         return scene;
     }
 
+
+
     private void onKeyPressed(KeyEvent keyEvent) {
         KeyCombination keyCombination = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
         switch (keyEvent.getCode()) {
@@ -134,15 +135,12 @@ public class Main extends Application {
             case CONTROL:
                 Scene origin = window.getScene();
                 System.out.println("Hello");
+
+                SaveScreen screen = new SaveScreen();
                 window.setScene(SaveScene);
                 SaveScreen.display("SaveScreen", "Provide a name: ", map, window, origin);
                 break;
         }
-
-
-
-
-
     }
 
     private void refresh() {

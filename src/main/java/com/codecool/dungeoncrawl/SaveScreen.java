@@ -5,11 +5,15 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.awt.*;
 import java.sql.Date;
@@ -29,20 +33,27 @@ public class SaveScreen {
         Stage window  = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
-        window.setMinWidth(200);
         Label label = new Label();
-        label.setText("message");
+        label.setText(message);
         javafx.scene.control.Button buttonSave = new javafx.scene.control.Button();
         buttonSave.setText("Save");
-        //buttonSave.setFocusTraversable(false);
         javafx.scene.control.Button buttonCancel = new javafx.scene.control.Button();
         buttonCancel.setText("Cancel");
-        //buttonCancel.setFocusTraversable(false);
+        javafx.scene.control.Button buttonLoad = new javafx.scene.control.Button();
+        buttonLoad.setText("Load");
+        TextField playerName = new TextField();
 
         buttonCancel.setOnAction(e -> {
             origin.setScene(originScene);
             window.close();
 
+        });
+
+        buttonLoad.setOnAction(e -> {
+            LoadScreen.display("messages");
+        });
+        buttonCancel.setOnAction(e -> {
+            window.close();
         });
         buttonSave.setOnAction(e -> {
             try {
@@ -53,10 +64,10 @@ public class SaveScreen {
         });
 
         VBox layout = new VBox();
-        layout.getChildren().addAll(buttonSave, buttonCancel);
+        layout.getChildren().addAll(label, playerName, buttonSave, buttonCancel, buttonLoad);
         layout.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(layout);
+        Scene scene = new Scene(layout, 500, 200);
         window.setScene(scene);
         window.showAndWait();
 
