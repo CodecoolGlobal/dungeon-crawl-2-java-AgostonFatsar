@@ -11,7 +11,7 @@ public class Player extends Actor {
     private  ArrayList<Item> items = new ArrayList<Item>();
     private static int damage = 5;
 
-    private String name = "test3";
+    private String name = "test25";
     public Player(Cell cell) {
         super(cell, damage);
         super.setHealth(35);

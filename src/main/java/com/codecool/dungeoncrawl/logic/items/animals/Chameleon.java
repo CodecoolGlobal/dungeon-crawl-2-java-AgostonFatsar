@@ -10,11 +10,9 @@ public class Chameleon extends Item {
 
     public Chameleon (Cell cell){
         super(cell);
-        startCell = cell;
 
     }
 
-    Cell startCell;
     public String getTileName() {
         return "chameleon";
     }
