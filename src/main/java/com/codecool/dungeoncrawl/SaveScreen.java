@@ -18,12 +18,14 @@ import java.sql.SQLException;
 public class SaveScreen {
 
 
+
+
     static GameDatabaseManager gameDatabaseManager;
     static GameState gameState;
     static PlayerModel playerModel;
 
     static int playerId = 0;
-    public static void display(String title, String message, GameMap map){
+    public static void display(String title, String message, GameMap map, Stage origin, Scene originScene){
         Stage window  = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
@@ -32,10 +34,16 @@ public class SaveScreen {
         label.setText("message");
         javafx.scene.control.Button buttonSave = new javafx.scene.control.Button();
         buttonSave.setText("Save");
+        //buttonSave.setFocusTraversable(false);
         javafx.scene.control.Button buttonCancel = new javafx.scene.control.Button();
         buttonCancel.setText("Cancel");
+        //buttonCancel.setFocusTraversable(false);
 
-        buttonCancel.setOnAction(e -> window.close());
+        buttonCancel.setOnAction(e -> {
+            origin.setScene(originScene);
+            window.close();
+
+        });
         buttonSave.setOnAction(e -> {
             try {
                 databaseHandler(map);
@@ -51,6 +59,8 @@ public class SaveScreen {
         Scene scene = new Scene(layout);
         window.setScene(scene);
         window.showAndWait();
+
+
     }
 
     public static void databaseHandler(GameMap map) throws SQLException {
