@@ -9,6 +9,7 @@ import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.google.gson.Gson;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,6 +31,7 @@ import javafx.stage.Stage;
 
 import javax.sql.DataSource;
 import java.sql.Date;
+import java.sql.SQLException;
 
 public class Main extends Application {
     Scene SaveScene;
@@ -44,12 +46,6 @@ public class Main extends Application {
     Label inventoryLabel = new Label();
     Button pickUpButton = new Button("Pick Up");
 
-    GameDatabaseManager gameDatabaseManager;
-    GameState gameState;
-    PlayerModel playerModel;
-
-    String currentMap = "map1";
-    int playerId = 0;
 
 
 
@@ -57,16 +53,11 @@ public class Main extends Application {
         launch(args);
     }
 
+
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        gameDatabaseManager = new GameDatabaseManager();
-        gameDatabaseManager.setup();
-        gameDatabaseManager.savePlayer( map.getPlayer());
-        playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
-        playerId = gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName());
-        long millis=System.currentTimeMillis();
-        java.sql.Date savedAt=new java.sql.Date(millis);
-        gameDatabaseManager.saveGameState(map, savedAt, playerModel, playerId);
+
         window = primaryStage;
         Scene scene = createScene();
 
@@ -88,6 +79,8 @@ public class Main extends Application {
         });
         scene.setOnKeyPressed(this::onKeyPressed);
     }
+
+
 
     private Scene createScene() {
 
@@ -142,7 +135,7 @@ public class Main extends Application {
             case CONTROL:
                 System.out.println("Hello");
                 window.setScene(SaveScene);
-                SaveScreen.display("SaveScreen", "Provide a name: ");
+                SaveScreen.display("SaveScreen", "Provide a name: ", map);
                 break;
         }
     }
@@ -157,14 +150,7 @@ public class Main extends Application {
         checkIfNewMapNeeded(!(map.getPlayer().isAlive()), 0);
         checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("newgame"), 1);
         checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("nextlevel"), 2);
-        PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
-        updatePlayerTable(playerModel);
-        gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName()), playerModel);
-        gameState.setPlayer(playerModel);
-        long millis=System.currentTimeMillis();
-        java.sql.Date savedAt=new java.sql.Date(millis);
-        gameState.setSavedAt(savedAt);
-        gameDatabaseManager.getGameStateDao().update(gameState,playerId);
+
 
         /*GameState gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName()), playerModel); // TODO: Fix it, currently not working for different player ID-s
         gameState.setPlayer(playerModel);
@@ -210,12 +196,6 @@ public class Main extends Application {
 
     private void checkIfNewMapNeeded(Boolean hasItem, int mapNr) {
         if (hasItem) {
-
-            String mapName = "map" + mapNr;
-            gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName()), playerModel); // TODO: Fix it, currently not working for different player ID-s
-            gameState.setCurrentMap(mapName);
-            gameDatabaseManager.getGameStateDao().update(gameState,playerId);
-
             map.getPlayer().eraseItems();
             map = MapLoader.loadMap(mapNr);
         }
@@ -256,13 +236,7 @@ public class Main extends Application {
         if (map.getPanda() != null) map.getPanda().movePanda(map);
     }
 
-    private void updatePlayerTable(PlayerModel playerModel) {
-        playerModel.setHp(map.getPlayer().getHealth());
-        playerModel.setX(0);
-        playerModel.setY(0);
-        playerModel.setPlayerName(map.getPlayer().getName());
-        gameDatabaseManager.getPlayerDao().update(playerModel);
-    }
+
 
     private void checkDoorPassing() {
         if (map.getPlayer().getCell(map.getPlayer().getTileName(), map).getTileName().equals("closedDoor")){
