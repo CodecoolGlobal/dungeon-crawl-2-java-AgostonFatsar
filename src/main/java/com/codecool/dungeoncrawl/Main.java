@@ -134,8 +134,10 @@ public class Main extends Application {
                 break;
             case CONTROL:
                 System.out.println("Hello");
+
+                SaveScreen screen = new SaveScreen();
                 window.setScene(SaveScene);
-                SaveScreen.display("SaveScreen", "Provide a name: ", map);
+                screen.display("SaveScreen", "Provide a name: ", map);
                 break;
         }
     }

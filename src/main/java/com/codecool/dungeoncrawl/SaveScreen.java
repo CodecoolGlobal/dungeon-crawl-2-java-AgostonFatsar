@@ -5,36 +5,44 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
-import java.awt.*;
 import java.sql.Date;
 import java.sql.SQLException;
 
 public class SaveScreen {
 
+    Scene LoadScreen;
+    GameDatabaseManager gameDatabaseManager;
+    GameState gameState;
+    PlayerModel playerModel;
 
-    static GameDatabaseManager gameDatabaseManager;
-    static GameState gameState;
-    static PlayerModel playerModel;
-
-    static int playerId = 0;
-    public static void display(String title, String message, GameMap map){
+    int playerId = 0;
+    public void display(String title, String message, GameMap map){
         Stage window  = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
-        window.setMinWidth(200);
+        window.setMinWidth(400);
         Label label = new Label();
-        label.setText("message");
+        label.setText(message);
         javafx.scene.control.Button buttonSave = new javafx.scene.control.Button();
         buttonSave.setText("Save");
         javafx.scene.control.Button buttonCancel = new javafx.scene.control.Button();
         buttonCancel.setText("Cancel");
+        javafx.scene.control.Button buttonLoad = new javafx.scene.control.Button();
+        buttonCancel.setText("Load");
+        TextField playerName = new TextField();
 
+
+        buttonLoad.setOnAction(e -> window.close());
         buttonCancel.setOnAction(e -> window.close());
         buttonSave.setOnAction(e -> {
             try {
@@ -45,7 +53,7 @@ public class SaveScreen {
         });
 
         VBox layout = new VBox();
-        layout.getChildren().addAll(buttonSave, buttonCancel);
+        layout.getChildren().addAll(label, playerName, buttonSave, buttonCancel);
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);
@@ -53,7 +61,12 @@ public class SaveScreen {
         window.showAndWait();
     }
 
-    public static void databaseHandler(GameMap map) throws SQLException {
+//    public EventHandler<ActionEvent> loadMenu(Stage window){
+//        window.setScene(LoadScreen);
+//        return LoadScreen.display("Message");
+//    }
+
+    public void databaseHandler(GameMap map) throws SQLException {
         initializeDatabaseConnection(map);
         PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
         updatePlayerTable(playerModel, map);
@@ -68,7 +81,7 @@ public class SaveScreen {
         gameDatabaseManager.getGameStateDao().update(gameState,playerId);
     }
 
-    private static void updatePlayerTable(PlayerModel playerModel, GameMap map) {
+    private void updatePlayerTable(PlayerModel playerModel, GameMap map) {
         playerModel.setHp(map.getPlayer().getHealth());
         playerModel.setX(0);
         playerModel.setY(0);
@@ -76,7 +89,7 @@ public class SaveScreen {
         gameDatabaseManager.getPlayerDao().update(playerModel);
     }
 
-    private static void initializeDatabaseConnection(GameMap map) throws SQLException {
+    private void initializeDatabaseConnection(GameMap map) throws SQLException {
         gameDatabaseManager = new GameDatabaseManager();
         gameDatabaseManager.setup();
         gameDatabaseManager.savePlayer( map.getPlayer());
