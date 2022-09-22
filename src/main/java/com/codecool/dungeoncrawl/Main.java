@@ -1,9 +1,14 @@
 package com.codecool.dungeoncrawl;
 
+import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
+import com.codecool.dungeoncrawl.dao.PlayerDao;
+import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.*;
 //import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.model.GameState;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +24,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import javax.sql.DataSource;
+import java.sql.Date;
+
 public class Main extends Application {
     GameMap map = MapLoader.loadMap(1);
     Canvas canvas = new Canvas(
@@ -30,6 +38,13 @@ public class Main extends Application {
     Label inventoryLabel = new Label();
     Button pickUpButton = new Button("Pick Up");
 
+    GameDatabaseManager gameDatabaseManager;
+    GameState gameState;
+    PlayerModel playerModel;
+
+    String currentMap = "map1";
+    int playerId = 0;
+
 
 
     public static void main(String[] args) {
@@ -38,6 +53,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        gameDatabaseManager = new GameDatabaseManager();
+        gameDatabaseManager.setup();
+        gameDatabaseManager.savePlayer( map.getPlayer());
+        playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
+        playerId = gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName());
+        long millis=System.currentTimeMillis();
+        java.sql.Date savedAt=new java.sql.Date(millis);
+        gameDatabaseManager.saveGameState(currentMap,savedAt, playerModel, playerId);
         GridPane ui = new GridPane();
         ui.setPrefWidth(360);
         ui.setPadding(new Insets(10));
@@ -79,6 +102,14 @@ public class Main extends Application {
             }
         });
         scene.setOnKeyPressed(this::onKeyPressed);
+
+       /* PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
+        playerModel.setHp(map.getPlayer().getHealth());
+        playerModel.setX(map.getPlayer().getX());
+        playerModel.setY(map.getPlayer().getY());
+        playerModel.setPlayerName(map.getPlayer().getName());
+        gameDatabaseManager.getPlayerDao().update(gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName()));
+   */
     }
 
 
@@ -113,6 +144,28 @@ public class Main extends Application {
         checkIfNewMapNeeded(!(map.getPlayer().isAlive()), 0);
         checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("newgame"), 1);
         checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("nextlevel"), 2);
+        PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
+        updatePlayerTable(playerModel);
+        gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName()), playerModel);
+        gameState.setPlayer(playerModel);
+        long millis=System.currentTimeMillis();
+        java.sql.Date savedAt=new java.sql.Date(millis);
+        gameState.setSavedAt(savedAt);
+        gameDatabaseManager.getGameStateDao().update(gameState,playerId);
+
+        /*GameState gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName()), playerModel); // TODO: Fix it, currently not working for different player ID-s
+        gameState.setPlayer(playerModel);
+        long millis=System.currentTimeMillis();
+        java.sql.Date savedAt=new java.sql.Date(millis);
+        gameState.setSavedAt(savedAt);*/
+        /*playerModel.setHp(map.getPlayer().getHealth());
+        playerModel.setX(map.getPlayer().getX());
+        playerModel.setY(map.getPlayer().getY());
+        playerModel.setPlayerName(map.getPlayer().getName());
+        gameDatabaseManager.getPlayerDao().update(playerModel);*/
+
+
+
     }
 
     private String inventory(String cellType){
@@ -144,6 +197,12 @@ public class Main extends Application {
 
     private void checkIfNewMapNeeded(Boolean hasItem, int mapNr) {
         if (hasItem) {
+
+            String mapName = "map" + mapNr;
+            gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName()), playerModel); // TODO: Fix it, currently not working for different player ID-s
+            gameState.setCurrentMap(mapName);
+            gameDatabaseManager.getGameStateDao().update(gameState,playerId);
+
             map.getPlayer().eraseItems();
             map = MapLoader.loadMap(mapNr);
         }
@@ -185,6 +244,14 @@ public class Main extends Application {
         if (map.getAuto() != null) map.getAuto().move(map);
         if (map.getChameleon() != null) map.getChameleon().moveChameleon(map);
         if (map.getPanda() != null) map.getPanda().movePanda(map);
+    }
+
+    private void updatePlayerTable(PlayerModel playerModel) {
+        playerModel.setHp(map.getPlayer().getHealth());
+        playerModel.setX(map.getPlayer().getX());
+        playerModel.setY(map.getPlayer().getY());
+        playerModel.setPlayerName(map.getPlayer().getName());
+        gameDatabaseManager.getPlayerDao().update(playerModel);
     }
 
     private void checkDoorPassing() {
