@@ -41,13 +41,12 @@ public class SaveScreen {
         javafx.scene.control.Button buttonLoad = new javafx.scene.control.Button();
         buttonCancel.setText("Load");
         TextField playerName = new TextField();
-        String playerNameString = playerName.getText();
 
         buttonLoad.setOnAction(e -> window.close());
         buttonCancel.setOnAction(e -> window.close());
         buttonSave.setOnAction(e -> {
             try {
-                databaseHandler(map, playerNameString);
+                databaseHandler(map, playerName);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -67,13 +66,14 @@ public class SaveScreen {
 //        return LoadScreen.display("Message");
 //    }
 
-    public void databaseHandler(GameMap map, String playerNameString) throws SQLException {
+    public void databaseHandler(GameMap map, TextField playerName) throws SQLException {
+        String playerNameString = playerName.getText();
         gameDatabaseManager = new GameDatabaseManager();
         gameDatabaseManager.setup();
         boolean existingPlayerName = false;
 
-        List<String> playerName = gameDatabaseManager.getPlayerDao().getAllPlayerNames();
-        for ( String name: playerName){
+        List<String> playerNameList = gameDatabaseManager.getPlayerDao().getAllPlayerNames();
+        for ( String name: playerNameList){
             if (name.equals(playerNameString)){
                 existingPlayerName = true;
                 break;
@@ -84,27 +84,29 @@ public class SaveScreen {
         }
         else{
             PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(playerNameString);
-            updatePlayerTable(playerModel, map, playerNameString);
+            updatePlayerTable(playerModel, map, playerName);
+            playerModel = gameDatabaseManager.getPlayerDao().get(playerNameString);
             gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(playerNameString), playerModel);
             updateGameStateTable(map, playerModel);
         }
     }
 
-    private void updatePlayerTable(PlayerModel playerModel, GameMap map, String playerNameString) {
+    private void updatePlayerTable(PlayerModel playerModel, GameMap map, TextField playerName) {
+        String playerNameString = playerName.getText();
         playerModel.setHp(map.getPlayer().getHealth());
         playerModel.setX(0);
         playerModel.setY(0);
         playerModel.setPlayerName(playerNameString);
-        gameDatabaseManager.getPlayerDao().update(playerModel);
+        gameDatabaseManager.getPlayerDao().update(playerModel, playerNameString);
     }
 
     private void initializeDatabaseConnection(GameMap map, String playerNameString ) throws SQLException {
         gameDatabaseManager.setup();
-        gameDatabaseManager.savePlayer( map.getPlayer());
-        playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
-        playerModel.setPlayerName(playerNameString);
-        gameDatabaseManager.getPlayerDao().update(playerModel);
-        playerId = gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName());
+        gameDatabaseManager.savePlayer( map.getPlayer(), playerNameString);
+        playerModel = gameDatabaseManager.getPlayerDao().get(playerNameString);
+        // playerModel.setPlayerName(playerNameString);
+        // gameDatabaseManager.getPlayerDao().update(playerModel, playerNameString);
+        playerId = gameDatabaseManager.getPlayerDao().getId(playerNameString);
         long millis=System.currentTimeMillis();
         Date savedAt=new Date(millis);
         gameDatabaseManager.saveGameState(map, savedAt, playerModel, playerId);

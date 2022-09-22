@@ -22,9 +22,9 @@ public class GameDatabaseManager {
         gameStateDao = new GameStateDaoJdbc(dataSource,playerDao);
     }
 
-    public  void savePlayer(Player player) {
+    public  void savePlayer(Player player, String name) {
         PlayerModel model = new PlayerModel(player);
-        playerDao.add(model);
+        playerDao.add(model, name);
     }
 
     public  void saveGameState(GameMap currentMap, Date savedAt, PlayerModel player, int playerId) {
