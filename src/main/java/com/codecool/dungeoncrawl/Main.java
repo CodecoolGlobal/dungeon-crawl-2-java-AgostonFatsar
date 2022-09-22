@@ -39,8 +39,11 @@ public class Main extends Application {
     Button pickUpButton = new Button("Pick Up");
 
     GameDatabaseManager gameDatabaseManager;
+    GameState gameState;
+    PlayerModel playerModel;
 
     String currentMap = "map1";
+    int playerId = 0;
 
 
 
@@ -53,10 +56,11 @@ public class Main extends Application {
         gameDatabaseManager = new GameDatabaseManager();
         gameDatabaseManager.setup();
         gameDatabaseManager.savePlayer( map.getPlayer());
-        PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
+        playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
+        playerId = gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName());
         long millis=System.currentTimeMillis();
         java.sql.Date savedAt=new java.sql.Date(millis);
-        gameDatabaseManager.saveGameState(currentMap,savedAt, playerModel);
+        gameDatabaseManager.saveGameState(currentMap,savedAt, playerModel, playerId);
         GridPane ui = new GridPane();
         ui.setPrefWidth(360);
         ui.setPadding(new Insets(10));
@@ -142,11 +146,18 @@ public class Main extends Application {
         checkIfNewMapNeeded(map.getPlayer().checkIfPlayerHasItem("nextlevel"), 2);
         PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
         updatePlayerTable(playerModel);
-        GameState gameState = gameDatabaseManager.getGameStateDao().get(50); // TODO: Fix it, currently not working for different player ID-s
+        gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName()), playerModel);
         gameState.setPlayer(playerModel);
         long millis=System.currentTimeMillis();
         java.sql.Date savedAt=new java.sql.Date(millis);
         gameState.setSavedAt(savedAt);
+        gameDatabaseManager.getGameStateDao().update(gameState,playerId);
+
+        /*GameState gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName()), playerModel); // TODO: Fix it, currently not working for different player ID-s
+        gameState.setPlayer(playerModel);
+        long millis=System.currentTimeMillis();
+        java.sql.Date savedAt=new java.sql.Date(millis);
+        gameState.setSavedAt(savedAt);*/
         /*playerModel.setHp(map.getPlayer().getHealth());
         playerModel.setX(map.getPlayer().getX());
         playerModel.setY(map.getPlayer().getY());
@@ -186,6 +197,12 @@ public class Main extends Application {
 
     private void checkIfNewMapNeeded(Boolean hasItem, int mapNr) {
         if (hasItem) {
+
+            String mapName = "map" + mapNr;
+            gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName()), playerModel); // TODO: Fix it, currently not working for different player ID-s
+            gameState.setCurrentMap(mapName);
+            gameDatabaseManager.getGameStateDao().update(gameState,playerId);
+
             map.getPlayer().eraseItems();
             map = MapLoader.loadMap(mapNr);
         }

@@ -70,6 +70,23 @@ public class PlayerDaoJdbc implements PlayerDao {
     }
 
     @Override
+    public int getId(String name) {
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "SELECT id, player_name, hp, x, y FROM player WHERE player_name = ?";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, name);
+            ResultSet rs = st.executeQuery();
+            if (!rs.next()) {
+                return 0;
+            }
+            int id = rs.getInt(1);
+            return id;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while reading player with name: " + name, e);
+        }
+    }
+
+    @Override
     public List<PlayerModel> getAll() {
         return null;
     }

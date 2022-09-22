@@ -25,9 +25,9 @@ public class GameDatabaseManager {
         playerDao.add(model);
     }
 
-    public  void saveGameState(String currentMap, Date savedAt, PlayerModel player) {
+    public  void saveGameState(String currentMap, Date savedAt, PlayerModel player, int playerId) {
         GameState model = new GameState(currentMap, savedAt, player);
-        gameStateDao.add(model);
+        gameStateDao.add(model, playerId);
     }
 
     private  DataSource connect() throws SQLException {
