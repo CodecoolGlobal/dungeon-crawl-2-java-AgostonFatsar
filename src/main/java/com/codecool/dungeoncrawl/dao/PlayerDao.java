@@ -12,4 +12,6 @@ public interface PlayerDao {
     PlayerModel get(String name);
     List<PlayerModel> getAll();
 
+    List<String> getAllPlayerNames();
+
 }

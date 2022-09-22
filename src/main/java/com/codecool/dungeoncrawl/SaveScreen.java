@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.List;
 
 public class SaveScreen {
 
@@ -40,13 +41,13 @@ public class SaveScreen {
         javafx.scene.control.Button buttonLoad = new javafx.scene.control.Button();
         buttonCancel.setText("Load");
         TextField playerName = new TextField();
-
+        String playerNameString = playerName.getText();
 
         buttonLoad.setOnAction(e -> window.close());
         buttonCancel.setOnAction(e -> window.close());
         buttonSave.setOnAction(e -> {
             try {
-                databaseHandler(map);
+                databaseHandler(map, playerNameString);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -66,37 +67,55 @@ public class SaveScreen {
 //        return LoadScreen.display("Message");
 //    }
 
-    public void databaseHandler(GameMap map) throws SQLException {
-        initializeDatabaseConnection(map);
-        PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
-        updatePlayerTable(playerModel, map);
-        gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName()), playerModel);
-        gameState.setPlayer(playerModel);
-        long millis=System.currentTimeMillis();
-        java.sql.Date savedAt=new java.sql.Date(millis);
-        gameState.setSavedAt(savedAt);
+    public void databaseHandler(GameMap map, String playerNameString) throws SQLException {
+        gameDatabaseManager = new GameDatabaseManager();
+        gameDatabaseManager.setup();
+        boolean existingPlayerName = false;
 
-
-        gameState.setCurrentMap(new Gson().toJson(map));
-        gameDatabaseManager.getGameStateDao().update(gameState,playerId);
+        List<String> playerName = gameDatabaseManager.getPlayerDao().getAllPlayerNames();
+        for ( String name: playerName){
+            if (name.equals(playerNameString)){
+                existingPlayerName = true;
+                break;
+            }
+        }
+        if(!existingPlayerName) {
+            initializeDatabaseConnection(map, playerNameString);
+        }
+        else{
+            PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(playerNameString);
+            updatePlayerTable(playerModel, map, playerNameString);
+            gameState = gameDatabaseManager.getGameStateDao().get(gameDatabaseManager.getPlayerDao().getId(playerNameString), playerModel);
+            updateGameStateTable(map, playerModel);
+        }
     }
 
-    private void updatePlayerTable(PlayerModel playerModel, GameMap map) {
+    private void updatePlayerTable(PlayerModel playerModel, GameMap map, String playerNameString) {
         playerModel.setHp(map.getPlayer().getHealth());
         playerModel.setX(0);
         playerModel.setY(0);
-        playerModel.setPlayerName(map.getPlayer().getName());
+        playerModel.setPlayerName(playerNameString);
         gameDatabaseManager.getPlayerDao().update(playerModel);
     }
 
-    private void initializeDatabaseConnection(GameMap map) throws SQLException {
-        gameDatabaseManager = new GameDatabaseManager();
+    private void initializeDatabaseConnection(GameMap map, String playerNameString ) throws SQLException {
         gameDatabaseManager.setup();
         gameDatabaseManager.savePlayer( map.getPlayer());
         playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
+        playerModel.setPlayerName(playerNameString);
+        gameDatabaseManager.getPlayerDao().update(playerModel);
         playerId = gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName());
         long millis=System.currentTimeMillis();
         Date savedAt=new Date(millis);
         gameDatabaseManager.saveGameState(map, savedAt, playerModel, playerId);
+    }
+
+    private void updateGameStateTable(GameMap map, PlayerModel playerModel) {
+        gameState.setPlayer(playerModel);
+        long millis = System.currentTimeMillis();
+        java.sql.Date savedAt = new java.sql.Date(millis);
+        gameState.setSavedAt(savedAt);
+        gameState.setCurrentMap(new Gson().toJson(map));
+        gameDatabaseManager.getGameStateDao().update(gameState, playerId);
     }
 }
