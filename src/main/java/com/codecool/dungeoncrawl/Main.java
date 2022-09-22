@@ -18,9 +18,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -28,13 +32,15 @@ import javax.sql.DataSource;
 import java.sql.Date;
 
 public class Main extends Application {
+    Scene SaveScene;
+    Stage window;
+    Stage saveScreen;
     GameMap map = MapLoader.loadMap(1);
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
-    Label monsterHealthLabel = new Label();
     Label inventoryLabel = new Label();
     Button pickUpButton = new Button("Pick Up");
 
@@ -61,27 +67,8 @@ public class Main extends Application {
         long millis=System.currentTimeMillis();
         java.sql.Date savedAt=new java.sql.Date(millis);
         gameDatabaseManager.saveGameState(map, savedAt, playerModel, playerId);
-        GridPane ui = new GridPane();
-        ui.setPrefWidth(360);
-        ui.setPadding(new Insets(10));
-
-        ui.add(new Label("Player Health: "), 0, 0);
-
-        ui.add(healthLabel, 1, 0);
-        ui.add(pickUpButton, 0, 3);
-        ui.add(inventoryLabel, 0, 4);
-
-        BorderPane borderPane = new BorderPane();
-
-        borderPane.setCenter(canvas);
-        borderPane.setRight(ui);
-
-        Scene scene = new Scene(borderPane);
-        primaryStage.setScene(scene);
-        refresh();
-        pickUpButton.setFocusTraversable(false);
-        primaryStage.setTitle("Dungeon Crawl");
-        primaryStage.show();
+        window = primaryStage;
+        Scene scene = createScene();
 
         pickUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -100,19 +87,41 @@ public class Main extends Application {
             }
         });
         scene.setOnKeyPressed(this::onKeyPressed);
+    }
 
-       /* PlayerModel playerModel = gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName());
-        playerModel.setHp(map.getPlayer().getHealth());
-        playerModel.setX(map.getPlayer().getX());
-        playerModel.setY(map.getPlayer().getY());
-        playerModel.setPlayerName(map.getPlayer().getName());
-        gameDatabaseManager.getPlayerDao().update(gameDatabaseManager.getPlayerDao().get(map.getPlayer().getName()));
-   */
+    private Scene createScene() {
+
+        GridPane ui = new GridPane();
+        ui.setPrefWidth(360);
+
+        ui.setPadding(new Insets(10));
+
+        ui.add(new Label("Player Health: "), 0, 0);
+
+        ui.add(healthLabel, 1, 0);
+        ui.add(pickUpButton, 0, 3);
+        ui.add(inventoryLabel, 0, 4);
+
+        BorderPane borderPane = new BorderPane();
+
+
+        borderPane.setCenter(canvas);
+        borderPane.setRight(ui);
+
+        Scene scene = new Scene(borderPane);
+        window.setScene(scene);
+
+        refresh();
+        pickUpButton.setFocusTraversable(false);
+        window.setTitle("Dungeon Crawl");
+        window.show();
+        return scene;
     }
 
 
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        KeyCombination keyCombination = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1, map);
@@ -129,6 +138,11 @@ public class Main extends Application {
             case RIGHT:
                 map.getPlayer().move(1, 0, map);
                 refresh();
+                break;
+            case CONTROL:
+                System.out.println("Hello");
+                window.setScene(SaveScene);
+                SaveScreen.display("SaveScreen", "Provide a name: ");
                 break;
         }
     }
