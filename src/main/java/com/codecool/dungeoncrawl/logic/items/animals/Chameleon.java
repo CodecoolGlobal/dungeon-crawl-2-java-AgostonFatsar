@@ -25,23 +25,23 @@ public class Chameleon extends Item {
         map.setChameleon(null);
     }
 
-    public void moveChameleon() {
+    public void moveChameleon(GameMap map) {
 
         Cell originalCell = getCell();
 
         int randomNumber = Util.generateRandomInteger(5);
 
         if(randomNumber == 0) {
-            Cell nextCell = originalCell.getNeighbor(-1, 0);
+            Cell nextCell = originalCell.getNeighbor(map, -1, 0);
             checkCellAndMove(nextCell);
         }else if(randomNumber == 1) {
-            Cell nextCell = originalCell.getNeighbor(+1, 0);
+            Cell nextCell = originalCell.getNeighbor(map, +1, 0);
             checkCellAndMove(nextCell);
         }else if(randomNumber == 2) {
-            Cell nextCell = originalCell.getNeighbor(0, -1);
+            Cell nextCell = originalCell.getNeighbor(map, 0, -1);
             checkCellAndMove(nextCell);
         }else if(randomNumber == 3) {
-            Cell nextCell = originalCell.getNeighbor(0, +1);
+            Cell nextCell = originalCell.getNeighbor(map, 0, +1);
             checkCellAndMove(nextCell);
         }
 

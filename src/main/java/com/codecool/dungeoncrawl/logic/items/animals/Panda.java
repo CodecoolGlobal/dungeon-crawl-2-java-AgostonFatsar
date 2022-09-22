@@ -22,7 +22,7 @@ public class Panda extends Item {
         map.setPanda(null);
     }
 
-    public void movePanda() {
+    public void movePanda(GameMap map) {
 
         Cell originalCell = getCell();
 
@@ -33,7 +33,7 @@ public class Panda extends Item {
         list[1] = -1;
         list[2] = 0;
 
-        Cell nextCell = originalCell.getNeighbor(0, list[randomNumber]);
+        Cell nextCell = originalCell.getNeighbor(map, 0, list[randomNumber]);
         checkCellAndMove(nextCell);
 
 

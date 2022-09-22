@@ -57,7 +57,6 @@ public class MapLoader {
                         case 's':
                             cell.setType(CellType.FLOOR);
                             Trump trump = new Trump(cell);
-                            map.setSkeleton(trump);
                             map.addTrumps(trump);
                             break;
                         case 'p':
