@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.google.gson.Gson;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
@@ -26,9 +27,17 @@ public class GameDatabaseManager {
         playerDao.add(model);
     }
 
-    public  void saveGameState(String currentMap, Date savedAt, PlayerModel player, int playerId) {
-        GameState model = new GameState(currentMap, savedAt, player);
+    public  void saveGameState(GameMap currentMap, Date savedAt, PlayerModel player, int playerId) {
+        String serializedMap = new Gson().toJson(currentMap);
+        GameState model = new GameState(serializedMap, savedAt, player);
         gameStateDao.add(model, playerId);
+    }
+
+    public GameMap loadMap(int id) {
+        PlayerModel playerModel = playerDao.get(id);
+        GameState gameState = gameStateDao.get(id, playerModel);
+        String serializedMap = gameState.getCurrentMap();
+        return new Gson().fromJson(serializedMap, GameMap.class);
     }
 
     private  DataSource connect() throws SQLException {

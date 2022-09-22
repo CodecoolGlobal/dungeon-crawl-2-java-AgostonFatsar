@@ -16,10 +16,10 @@ public class PlayerModel extends BaseModel {
         this.y = y;
     }
 
-    public PlayerModel(Player player, GameMap map) {
+    public PlayerModel(Player player) {
         this.playerName = player.getName();
-        this.x = player.getCell(player.getTileName(), map).getX();
-        this.x = player.getCell(player.getTileName(), map).getY();
+        this.x = 0;
+        this.x = 0;
 
         this.hp = player.getHealth();
 

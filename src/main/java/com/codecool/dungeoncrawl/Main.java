@@ -60,7 +60,7 @@ public class Main extends Application {
         playerId = gameDatabaseManager.getPlayerDao().getId(map.getPlayer().getName());
         long millis=System.currentTimeMillis();
         java.sql.Date savedAt=new java.sql.Date(millis);
-        gameDatabaseManager.saveGameState(currentMap,savedAt, playerModel, playerId);
+        gameDatabaseManager.saveGameState(map, savedAt, playerModel, playerId);
         GridPane ui = new GridPane();
         ui.setPrefWidth(360);
         ui.setPadding(new Insets(10));
@@ -248,8 +248,8 @@ public class Main extends Application {
 
     private void updatePlayerTable(PlayerModel playerModel) {
         playerModel.setHp(map.getPlayer().getHealth());
-        playerModel.setX(map.getPlayer().getX());
-        playerModel.setY(map.getPlayer().getY());
+        playerModel.setX(0);
+        playerModel.setY(0);
         playerModel.setPlayerName(map.getPlayer().getName());
         gameDatabaseManager.getPlayerDao().update(playerModel);
     }
