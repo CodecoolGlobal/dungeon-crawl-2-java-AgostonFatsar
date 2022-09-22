@@ -20,7 +20,6 @@ import java.sql.SQLException;
 
 public class SaveScreen {
 
-    Scene LoadScreen;
     GameDatabaseManager gameDatabaseManager;
     GameState gameState;
     PlayerModel playerModel;
@@ -30,7 +29,6 @@ public class SaveScreen {
         Stage window  = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
-        window.setMinWidth(400);
         Label label = new Label();
         label.setText(message);
         javafx.scene.control.Button buttonSave = new javafx.scene.control.Button();
@@ -38,12 +36,16 @@ public class SaveScreen {
         javafx.scene.control.Button buttonCancel = new javafx.scene.control.Button();
         buttonCancel.setText("Cancel");
         javafx.scene.control.Button buttonLoad = new javafx.scene.control.Button();
-        buttonCancel.setText("Load");
+        buttonLoad.setText("Load");
         TextField playerName = new TextField();
 
 
-        buttonLoad.setOnAction(e -> window.close());
-        buttonCancel.setOnAction(e -> window.close());
+        buttonLoad.setOnAction(e -> {
+            LoadScreen.display("messages");
+        });
+        buttonCancel.setOnAction(e -> {
+            window.close();
+        });
         buttonSave.setOnAction(e -> {
             try {
                 databaseHandler(map);
@@ -53,10 +55,10 @@ public class SaveScreen {
         });
 
         VBox layout = new VBox();
-        layout.getChildren().addAll(label, playerName, buttonSave, buttonCancel);
+        layout.getChildren().addAll(label, playerName, buttonSave, buttonCancel, buttonLoad);
         layout.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(layout);
+        Scene scene = new Scene(layout, 500, 200);
         window.setScene(scene);
         window.showAndWait();
     }

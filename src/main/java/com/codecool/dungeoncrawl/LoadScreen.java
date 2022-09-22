@@ -20,22 +20,24 @@ import java.sql.SQLException;
 
 public class LoadScreen {
 
-    public void display(String message){
+    public static void display(String message){
         Stage window  = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setMinWidth(400);
+
         Label label = new Label();
-        javafx.scene.control.Button buttonSave = new javafx.scene.control.Button();
-        buttonSave.setText("This is load");
-        javafx.scene.control.Button buttonCancel = new javafx.scene.control.Button();
-        buttonCancel.setText("This is load");
+        label.setText("Save 1");
+        Label label2 = new Label();
+        label2.setText("Save 2");
+
+        label.setOnMouseClicked(e -> window.close());
+        label2.setOnMouseClicked(e -> window.close());
 
 
         VBox layout = new VBox();
-        layout.getChildren().addAll(label, buttonSave, buttonCancel);
+        layout.getChildren().addAll(label, label2);
         layout.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(layout);
+        Scene scene = new Scene(layout, 300, 300);
         window.setScene(scene);
         window.showAndWait();
     }
