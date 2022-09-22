@@ -25,11 +25,11 @@ public class Trump extends Actor {
         int playerY = player.getCell(player.getTileName(), map).getY();
         int OwnX = getCell(this.getTileName(), map).getX();
         int OwnY = getCell(this.getTileName(), map).getY();
-        Cell currentCell = getCell(player.getTileName(), map);
+        Cell currentCell = getCell(getTileName(), map);
         if (isAlive) {
             checkNextCell(OwnX > playerX, currentCell, -1, 0, currentCell, map);
-            checkNextCell(OwnX < playerY, currentCell, +1, 0, currentCell, map);
-            checkNextCell(OwnY > playerX, currentCell, 0, -1, currentCell, map);
+            checkNextCell(OwnX < playerX, currentCell, +1, 0, currentCell, map);
+            checkNextCell(OwnY > playerY, currentCell, 0, -1, currentCell, map);
             checkNextCell(OwnY < playerY, currentCell, 0, +1, currentCell, map);
         }
     }

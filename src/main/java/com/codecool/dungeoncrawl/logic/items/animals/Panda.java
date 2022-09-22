@@ -24,7 +24,7 @@ public class Panda extends Item {
 
     public void movePanda(GameMap map) {
 
-        Cell originalCell = getCell();
+        Cell originalCell  = getCell(this.getTileName(), map);
 
         int randomNumber = Util.generateRandomInteger(3);
 
@@ -34,18 +34,17 @@ public class Panda extends Item {
         list[2] = 0;
 
         Cell nextCell = originalCell.getNeighbor(map, 0, list[randomNumber]);
-        checkCellAndMove(nextCell);
+        checkCellAndMove(nextCell, map);
 
 
 
 
     }
-    public void checkCellAndMove(Cell nextCell){
+    public void checkCellAndMove(Cell nextCell, GameMap map){
         if(nextCell.getTileName().equals("wall") || nextCell.getTileName().equals("closedDoor") || nextCell.getItem() != null || nextCell.getActor() != null) {}
         else {
-            getCell().setItem(null);
+            getCell(this.getTileName(), map).setItem(null);
             nextCell.setItem(this);
-            setCell(nextCell);
             }
 
         }

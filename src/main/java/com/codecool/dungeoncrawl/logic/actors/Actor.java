@@ -72,7 +72,6 @@ public abstract class Actor implements Drawable{
     void moveActorToNextCell(Cell nextCell, Cell currentCell) {
         currentCell.setActor(null);
         nextCell.setActor(this);
-        currentCell = nextCell;
     }
 
     protected void confrontation(Cell nextCell) {

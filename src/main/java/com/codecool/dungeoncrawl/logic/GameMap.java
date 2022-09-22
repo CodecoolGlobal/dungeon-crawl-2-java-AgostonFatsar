@@ -22,7 +22,7 @@ public class GameMap {
 
 
     private Player player;
-    private Trump trump;
+
 
     public ArrayList<Actor> actors = new ArrayList<>();
 
@@ -49,25 +49,19 @@ public class GameMap {
         }
     }
 
-    public Iterable<Actor> getActorsList(){
-        return actors;
+
+    public void fillUpTrumps(GameMap map){
+        for (Cell[] ListOfCells : map.getCells()) {
+            for (Cell cell : ListOfCells) {
+                if (cell.getActor() != null){
+                    if (cell.getActor().getTileName().equals("skeleton"))
+                        trumps.add((Trump) cell.getActor());
+                }
+            }
+        }
     }
 
-    public Iterable<Item> getItemsList(){
-        return itemsThatMove;
-    }
 
-    public void fillUpActorsList(){
-        actors.add(this.auto);
-        actors.add(this.player);
-        actors.add(this.lion);
-        actors.addAll(trumps);
-    }
-
-    public void fillUpItemsList(){
-        itemsThatMove.add(this.chameleon);
-        itemsThatMove.add(this.panda);
-    }
 
     public Cell getCell(int x, int y) {
         return cells[x][y];
@@ -89,9 +83,6 @@ public class GameMap {
     public Player getPlayer() {
         return player;
     }
-    public Trump getSkeleton() {
-        return trump;
-    }
 
     public Lion getLion(){
         return lion;
@@ -109,9 +100,7 @@ public class GameMap {
         this.panda = panda;
     }
 
-    public void setSkeleton(Trump trump) {
-        this.trump = trump;
-    }
+
 
     public Auto getAuto() {
         return auto;

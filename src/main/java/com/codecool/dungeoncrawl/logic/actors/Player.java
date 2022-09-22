@@ -17,6 +17,8 @@ public class Player extends Actor {
         super.setHealth(35);
     }
 
+
+
     //move should be abstract
 
 
