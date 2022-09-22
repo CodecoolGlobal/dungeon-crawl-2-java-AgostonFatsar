@@ -52,7 +52,7 @@ public class Chameleon extends Item {
     public void checkCellAndMove(Cell nextCell, GameMap map){
         if(nextCell.getTileName().equals("wall") || nextCell.getTileName().equals("closedDoor") || nextCell.getItem() != null || nextCell.getActor() != null) {}
         else {
-            getCell(this.getTileName(), map).setActor(null);
+            getCell(this.getTileName(), map).setItem(null);
             nextCell.setItem(this);
         }
     }
