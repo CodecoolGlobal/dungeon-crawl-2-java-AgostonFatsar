@@ -55,8 +55,6 @@ public class Main extends Application {
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
-        map.fillUpActorsList();
-        map.fillUpItemsList();
         refresh();
         pickUpButton.setFocusTraversable(false);
         primaryStage.setTitle("Dungeon Crawl");
@@ -105,6 +103,7 @@ public class Main extends Application {
     }
 
     private void refresh() {
+        map.fillUpTrumps(map);
         moveActorsAndItems();
         drawCanvas();
         updateLabels();
@@ -173,12 +172,9 @@ public class Main extends Application {
     }
 
     private void moveActorsAndItems() {
-        if (map.getSkeleton() != null) {
-            for (Trump trump : map.getTrumps()) {
-                if (trump.isAlive()) {
-                    trump.move(map.getPlayer(), map);
-//                    trump.move(map.getPlayer(), map);
-                }
+        for (Trump trump : map.getTrumps()) {
+            if (trump.isAlive()) {
+                trump.move(map.getPlayer(), map);
             }
         }
         if (map.getAuto() != null) map.getAuto().move(map);

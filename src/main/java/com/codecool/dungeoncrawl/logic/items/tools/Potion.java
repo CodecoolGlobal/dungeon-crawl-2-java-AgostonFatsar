@@ -16,6 +16,8 @@ public class Potion extends Item {
 
     @Override
     public void act(GameMap map) {
-        cell.getActor().increaseHealth(2);
+        getCell(this.getTileName(), map).getActor().increaseHealth(2);
+
+        //lounge lizard - incident on lounge street
     }
 }
