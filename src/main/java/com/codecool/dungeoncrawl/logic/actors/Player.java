@@ -21,7 +21,7 @@ public class Player extends Actor {
 
     public void move(int dx, int dy, GameMap map) {
         Cell currenCell = getCell(getTileName(), map);
-        Cell nextCell = currenCell.getNeighbor(dx, dy);
+        Cell nextCell = currenCell.getNeighbor(map, dx, dy);
         if (super.nextCellIsEnemy(nextCell))
             confrontation(nextCell);
         else {

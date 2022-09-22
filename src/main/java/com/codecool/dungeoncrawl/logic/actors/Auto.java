@@ -28,7 +28,7 @@ public class Auto extends Actor{
 
     public void move(GameMap map) {
         Cell currentCell = getCell(getTileName(), map);
-        Cell nextCell = currentCell.getNeighbor(1, 0);
+        Cell nextCell = currentCell.getNeighbor(map, 1, 0);
         if (nextCellIsPlayer(nextCell)){
             confrontation(nextCell);
         }

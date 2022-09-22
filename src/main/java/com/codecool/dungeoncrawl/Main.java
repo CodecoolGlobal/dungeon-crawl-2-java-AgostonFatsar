@@ -151,7 +151,7 @@ public class Main extends Application {
 
     private void updateLabels() {
         healthLabel.setText("" + map.getPlayer().getHealth());
-        String inventoryText = inventory(map.getPlayer().getCell(map.getPlayer().getTileName(), map).getNeighbor(0,-1).getTileName());
+        String inventoryText = inventory(map.getPlayer().getCell(map.getPlayer().getTileName(), map).getNeighbor(map, 0,-1).getTileName());
         inventoryLabel.setText("" + inventoryText);
     }
 
@@ -183,8 +183,8 @@ public class Main extends Application {
         }
         if (map.getAuto() != null) map.getAuto().move(map);
         if (map.getAuto() != null) map.getAuto().move(map);
-        if (map.getChameleon() != null) map.getChameleon().moveChameleon();
-        if (map.getPanda() != null) map.getPanda().movePanda();
+        if (map.getChameleon() != null) map.getChameleon().moveChameleon(map);
+        if (map.getPanda() != null) map.getPanda().movePanda(map);
     }
 
     private void checkDoorPassing() {
