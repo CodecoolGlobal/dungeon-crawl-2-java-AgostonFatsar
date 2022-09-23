@@ -2,10 +2,13 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
+import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.logic.items.animals.LionItem;
+
+import java.util.Objects;
 
 public abstract class Actor implements Drawable{
-    protected Cell cell;
 
     protected int health;
 
@@ -15,8 +18,7 @@ public abstract class Actor implements Drawable{
 
 
     public Actor(Cell cell, int damage) {
-        this.cell = cell;
-        this.cell.setActor(this);
+        cell.setActor(this);
         isAlive = true;
         this.damage = damage;
 
@@ -40,22 +42,11 @@ public abstract class Actor implements Drawable{
         this.health += increment;
     }
 
-    public Cell getCell() {
-        return cell;
-    }
-
-    public void setCell(Cell cell) {
-        this.cell = cell;
-    }
 
 
-    public int getX() {
-        return cell.getX();
-    }
 
-    public int getY() {
-        return cell.getY();
-    }
+
+
 
     public boolean isAlive() {
         return isAlive;
@@ -64,10 +55,23 @@ public abstract class Actor implements Drawable{
 
     // HELPER METHODS FOR PLAYER MOVEMENT
 
-    void moveActorToNextCell(Cell nextCell) {
-        cell.setActor(null);
+    public Cell getCell(String actorName, GameMap map) {
+        Cell currentCell = null;
+        for (Cell[] ListOfCells : map.getCells()) {
+            for (Cell cell : ListOfCells) {
+                if (cell.getActor() != null){
+                    if (Objects.equals(cell.getActor().getTileName(), actorName)) {
+                        currentCell = cell;
+                    }
+                }
+            }
+        }
+        return currentCell;
+    }
+
+    void moveActorToNextCell(Cell nextCell, Cell currentCell) {
+        currentCell.setActor(null);
         nextCell.setActor(this);
-        cell = nextCell;
     }
 
     protected void confrontation(Cell nextCell) {
@@ -113,6 +117,7 @@ public abstract class Actor implements Drawable{
                 nextCell.getActor() != null && nextCell.getActor().getTileName().equals("auto") ||
                 nextCell.getActor() != null && nextCell.getActor().getTileName().equals("lion");
     }
+
 
 
 

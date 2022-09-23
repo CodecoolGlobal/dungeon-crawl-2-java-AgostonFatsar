@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.items.Item;
 
 import java.util.ArrayList;
@@ -9,18 +10,27 @@ public class Player extends Actor {
 
     private  ArrayList<Item> items = new ArrayList<Item>();
     private static int damage = 5;
+
+    private String name = "test69";
     public Player(Cell cell) {
         super(cell, damage);
         super.setHealth(35);
     }
 
-    public void move(int dx, int dy) {
-        Cell nextCell = getCell().getNeighbor(dx, dy);
+
+
+    //move should be abstract
+
+
+
+    public void move(int dx, int dy, GameMap map) {
+        Cell currenCell = getCell(getTileName(), map);
+        Cell nextCell = currenCell.getNeighbor(map, dx, dy);
         if (super.nextCellIsEnemy(nextCell))
             confrontation(nextCell);
         else {
             if (!super.cannotStepOnNextCell(nextCell)) {
-                super.moveActorToNextCell(nextCell);
+                super.moveActorToNextCell(nextCell, currenCell);
             }
         }
     }
@@ -43,6 +53,6 @@ public class Player extends Actor {
     }
 
     public String getName() {
-        return "name";
+        return name;
     }
 }

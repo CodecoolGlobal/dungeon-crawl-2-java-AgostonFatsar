@@ -9,16 +9,15 @@ public class Cell implements Drawable {
 
     private Item item;
 
-    private GameMap gameMap;
-
     private int x, y;
 
-    Cell(GameMap gameMap, int x, int y, CellType type) {
-        this.gameMap = gameMap;
+    Cell(int x, int y, CellType type) {
         this.x = x;
         this.y = y;
         this.type = type;
     }
+
+
     public CellType getType() {
         return type;
     }
@@ -44,8 +43,8 @@ public class Cell implements Drawable {
         return item;
     }
 
-    public Cell getNeighbor(int dx, int dy) {
-        return gameMap.getCell(x + dx, y + dy);
+    public Cell getNeighbor(GameMap map, int dx, int dy) {
+        return map.getCell(x + dx, y + dy);
     }
 
     @Override

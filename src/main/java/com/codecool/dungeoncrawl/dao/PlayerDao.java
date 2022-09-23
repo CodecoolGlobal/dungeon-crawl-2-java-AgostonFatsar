@@ -8,5 +8,8 @@ public interface PlayerDao {
     void add(PlayerModel player);
     void update(PlayerModel player);
     PlayerModel get(int id);
+    int getId(String name);
+    PlayerModel get(String name);
     List<PlayerModel> getAll();
+
 }

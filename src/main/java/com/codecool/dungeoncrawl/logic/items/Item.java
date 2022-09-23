@@ -4,23 +4,30 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.GameMap;
 
+import java.util.Objects;
+
 public abstract class Item implements Drawable {
 
-    protected Cell cell;
 
     public Item(Cell cell) {
-        this.cell = cell;
-        this.cell.setItem(this);
+        cell.setItem(this);
     }
 
-    public Cell getCell() {
-        return cell;
-    }
+    public abstract void act(GameMap map);
 
-    public void setCell(Cell cell) {
-        this.cell = cell;
-    }
 
-    public abstract  void act(GameMap map);
+    public Cell getCell(String actorName, GameMap map) {
+        Cell currentCell = null;
+        for (Cell[] ListOfCells : map.getCells()) {
+            for (Cell cell : ListOfCells) {
+                if (cell.getItem() != null) {
+                    if (Objects.equals(cell.getItem().getTileName(), actorName)) {
+                        currentCell = cell;
+                    }
+                }
+            }
+        }
+        return currentCell;
+    }
 
 }

@@ -7,16 +7,23 @@ import com.codecool.dungeoncrawl.logic.items.animals.LionItem;
 import com.codecool.dungeoncrawl.logic.items.animals.Panda;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GameMap {
     private final int width;
     private final int height;
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
     private final Cell[][] cells;
 
 
 
     private Player player;
-    private Trump trump;
+
+
     public ArrayList<Actor> actors = new ArrayList<>();
 
     public ArrayList<Item> itemsThatMove = new ArrayList<>();
@@ -37,30 +44,24 @@ public class GameMap {
         cells = new Cell[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                cells[x][y] = new Cell(this, x, y, defaultCellType);
+                cells[x][y] = new Cell( x, y, defaultCellType);
             }
         }
     }
 
-    public Iterable<Actor> getActorsList(){
-        return actors;
+
+    public void fillUpTrumps(GameMap map){
+        for (Cell[] ListOfCells : map.getCells()) {
+            for (Cell cell : ListOfCells) {
+                if (cell.getActor() != null){
+                    if (cell.getActor().getTileName().equals("skeleton"))
+                        trumps.add((Trump) cell.getActor());
+                }
+            }
+        }
     }
 
-    public Iterable<Item> getItemsList(){
-        return itemsThatMove;
-    }
 
-    public void fillUpActorsList(){
-        actors.add(this.auto);
-        actors.add(this.player);
-        actors.add(this.lion);
-        actors.addAll(trumps);
-    }
-
-    public void fillUpItemsList(){
-        itemsThatMove.add(this.chameleon);
-        itemsThatMove.add(this.panda);
-    }
 
     public Cell getCell(int x, int y) {
         return cells[x][y];
@@ -82,9 +83,6 @@ public class GameMap {
     public Player getPlayer() {
         return player;
     }
-    public Trump getSkeleton() {
-        return trump;
-    }
 
     public Lion getLion(){
         return lion;
@@ -102,9 +100,7 @@ public class GameMap {
         this.panda = panda;
     }
 
-    public void setSkeleton(Trump trump) {
-        this.trump = trump;
-    }
+
 
     public Auto getAuto() {
         return auto;
@@ -132,9 +128,17 @@ public class GameMap {
 
     public void switchLion(Item item){
         player.getItems().add(item);
-        Cell lionCell = getLion().getCell();
-        lionCell.setActor(null);
-        lionCell.setItem(new LionItem(lionCell));
+        for (Cell [] ListOfCells : cells){
+            for(Cell cell : ListOfCells){
+                if (cell.getActor() != null){
+                    if(Objects.equals(cell.getActor().getTileName(), "lion")) {
+                        cell.setActor(null);
+                        cell.setItem(new LionItem(cell));
+                    }
+                }
+            }
+        }
+
 
     }
 }
